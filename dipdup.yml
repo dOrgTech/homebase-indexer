@@ -1,0 +1,74 @@
+spec_version: 1.0
+package: registrydao
+
+database:
+  kind: postgres
+  host: ec2-18-215-111-67.compute-1.amazonaws.com
+  port: 5432
+  user: dvbzrwtjytnzqq
+  password: 21d42aa48911445f4944943e35d9c7ab608c765882220753b0d6da5989b9228d
+  database: d5n0dm2b60rj2a
+  schema_name: public
+
+contracts:
+  registry:
+    address: KT1ERUQ1biQTsQ1ShyEZmsDWnkqkXpumhz3k
+    typename: registry
+
+datasources:
+  tzkt:
+    kind: tzkt
+    url: https://api.florencenet.tzkt.io
+
+templates:
+  registry_dao:
+    kind: operation
+    datasource: tzkt
+    types:
+      - transaction
+      - origination
+    contracts:
+      - <contract>
+    handlers:
+      # - callback: on_origination
+      #   pattern:
+      #     - type: origination
+      #       originated_contract: <contract>
+      # - callback: on_propose
+      #   pattern:
+      #     - type: transaction
+      #       destination: <contract>
+      #       entrypoint: propose
+      # - callback: on_flush
+      #   pattern:
+      #     - type: transaction
+      #       destination: <contract>
+      #       entrypoint: flush
+      - callback: on_freeze
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: freeze
+      # - callback: on_unfreeze
+      #   pattern:
+      #     - type: transaction
+      #       destination: <contract>
+      #       entrypoint: unfreeze
+      # - callback: on_drop_proposal
+      #   pattern:
+      #     - type: transaction
+      #       destination: <contract>
+      #       entrypoint: drop_proposal
+
+indexes:
+  factory:
+    kind: operation
+    datasource: tzkt
+    types:
+      - origination
+    handlers:
+        - callback: on_factory_origination
+          pattern:
+            - type: origination
+              similar_to: registry
+    stateless: True
