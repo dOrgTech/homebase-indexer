@@ -1,7 +1,7 @@
+from dipdup.models import OperationData, Transaction, Origination, BigMapDiff, BigMapData, BigMapAction
+from dipdup.context import HandlerContext, RollbackHandlerContext
 from typing import cast
 
-from dipdup.models import Origination
-from dipdup.context import HandlerContext
 
 from registrydao.types.registry.storage import RegistryStorage
 

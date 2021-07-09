@@ -1,8 +1,9 @@
+from enum import unique
 from tortoise import Model, fields
 
 class DAOType(Model):
     id = fields.IntField(pk=True)
-    name = fields.CharField(25)
+    name = fields.CharField(25, unique=True)
     daos: fields.ReverseRelation["DAO"]
 
     class Meta:
@@ -10,26 +11,26 @@ class DAOType(Model):
 
 class Token(Model):
     id = fields.IntField(pk=True)
-    contract = fields.CharField(36),
-    network = fields.CharField(25),
-    level = fields.IntField(),
-    timestamp = fields.DatetimeField(),
-    token_id = fields.IntField(),
-    symbol= fields.CharField(25),
-    name = fields.CharField(25),
-    decimals = fields.IntField(),
-    is_transferable = fields.BooleanField(),
-    should_prefer_symbol = fields.BooleanField(),
-    supply = fields.CharField(36),
-    transfered = fields.IntField()
+    contract = fields.CharField(36)
+    network = fields.CharField(25)
+    level = fields.IntField()
+    timestamp = fields.DatetimeField()
+    token_id = fields.IntField()
+    symbol= fields.CharField(25)
+    name = fields.CharField(25)
+    decimals = fields.IntField()
+    is_transferable = fields.BooleanField()
+    should_prefer_symbol = fields.BooleanField()
+    supply = fields.CharField(36)
     daos: fields.ReverseRelation["DAO"]
 
     class Meta:
-        table = 'tokens' 
+        table = 'tokens'
+        unique_together=(("contract", "token_id"), )
 
 class DAO(Model):
     id = fields.IntField(pk=True)
-    address = fields.CharField(36)
+    address = fields.CharField(36, unique=True)
     frozen_token_id = fields.IntField()
     governance_token: fields.ForeignKeyRelation[Token] = fields.ForeignKeyField(
         "models.Token", related_name="daos"
@@ -49,17 +50,17 @@ class DAO(Model):
     last_updated_cycle = fields.CharField(255)
     quorum_threshold = fields.CharField(255)
     staked = fields.CharField(255)
-    rejected_proposal_return_value = fields.CharField(255)
-    start_time = fields.CharField(255)
+    start_time = fields.DatetimeField()
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAOType", related_name="daos"
     )
+    network = fields.CharField(36)
 
     class Meta:
         table = 'daos' 
 
 class RegistryExtra(Model):
-    id = fields.IntField(36, pk=True)
+    id = fields.IntField(pk=True)
     dao: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAOType"
     )
@@ -76,8 +77,8 @@ class RegistryExtra(Model):
         table = 'registry_extra' 
 
 class Holder(Model):
-    id = fields.IntField(36, pk=True)
-    address = fields.CharField(36)
+    id = fields.IntField(pk=True)
+    address = fields.CharField(36, unique=True)
     ledger: fields.ReverseRelation["Ledger"]
     proposals: fields.ReverseRelation["Proposal"]
     votes: fields.ReverseRelation["Vote"]
@@ -88,26 +89,26 @@ class Holder(Model):
 class Ledger(Model):
     id = fields.IntField(pk=True)
     balance = fields.CharField(36)
-    dao = fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
+    dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
         "models.DAO", related_name="ledger"
     )
-    holder = fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
+    holder: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder", related_name="ledger"
     )
 
     class Meta:
-        table = 'ledger' 
+        table = 'ledger'
 
 class Proposal(Model):
     id = fields.IntField(pk=True)
-    dao = fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
+    dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
         "models.DAO", related_name="proposals"
     )
-    upvotes = fields.IntField()
-    downvotes = fields.IntField()
+    upvotes = fields.CharField(36)
+    downvotes = fields.CharField(36)
     start_date = fields.DatetimeField()
     metadata = fields.CharField(512)
-    proposer = fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
+    proposer: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder", related_name="proposals"
     )
     voting_stage_num: fields.CharField(50)
@@ -121,12 +122,12 @@ class Proposal(Model):
 
 class Vote(Model):
     id = fields.IntField(pk=True)
-    proposal = fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
+    proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
         "models.Proposal", related_name="votes"
     )
-    amount = fields.IntField()
+    amount = fields.CharField(36)
     support = fields.BooleanField()
-    voter = fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
+    voter: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder", related_name="votes"
     )
 

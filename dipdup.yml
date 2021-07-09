@@ -30,10 +30,10 @@ templates:
     contracts:
       - <contract>
     handlers:
-      # - callback: on_origination
-      #   pattern:
-      #     - type: origination
-      #       originated_contract: <contract>
+      - callback: on_origination
+        pattern:
+          - type: origination
+            originated_contract: <contract>
       # - callback: on_propose
       #   pattern:
       #     - type: transaction
@@ -44,16 +44,6 @@ templates:
       #     - type: transaction
       #       destination: <contract>
       #       entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: freeze
-      # - callback: on_unfreeze
-      #   pattern:
-      #     - type: transaction
-      #       destination: <contract>
-      #       entrypoint: unfreeze
       # - callback: on_drop_proposal
       #   pattern:
       #     - type: transaction
@@ -72,3 +62,7 @@ indexes:
             - type: origination
               similar_to: registry
     stateless: True
+  temp:
+    template: registry_dao
+    values:
+      contract: registry
