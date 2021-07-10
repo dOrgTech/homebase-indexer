@@ -1,13 +1,15 @@
 from enum import unique
 from tortoise import Model, fields
 
+
 class DAOType(Model):
     id = fields.IntField(pk=True)
     name = fields.CharField(25, unique=True)
     daos: fields.ReverseRelation["DAO"]
 
     class Meta:
-        table = 'dao_types' 
+        table = 'dao_types'
+
 
 class Token(Model):
     id = fields.IntField(pk=True)
@@ -16,7 +18,7 @@ class Token(Model):
     level = fields.IntField()
     timestamp = fields.DatetimeField()
     token_id = fields.IntField()
-    symbol= fields.CharField(25)
+    symbol = fields.CharField(25)
     name = fields.CharField(25)
     decimals = fields.IntField()
     is_transferable = fields.BooleanField()
@@ -26,7 +28,8 @@ class Token(Model):
 
     class Meta:
         table = 'tokens'
-        unique_together=(("contract", "token_id"), )
+        unique_together = (("contract", "token_id"),)
+
 
 class DAO(Model):
     id = fields.IntField(pk=True)
@@ -51,30 +54,49 @@ class DAO(Model):
     quorum_threshold = fields.CharField(255)
     staked = fields.CharField(255)
     start_time = fields.DatetimeField()
+    name = fields.CharField(255)
+    description = fields.CharField(255)
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAOType", related_name="daos"
     )
     network = fields.CharField(36)
 
     class Meta:
-        table = 'daos' 
+        table = 'daos'
+
 
 class RegistryExtra(Model):
     id = fields.IntField(pk=True)
     dao: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
-        "models.DAOType"
+        "models.DAO"
     )
     registry = fields.CharField(2500)
-    registryAffected = fields.CharField(2500)
+    registry_affected = fields.CharField(2500)
     frozen_extra_value = fields.CharField(255)
     frozen_scale_value = fields.CharField(255)
     slash_division_value = fields.CharField(255)
-    min_xtz = fields.CharField(255)
-    max_xtz = fields.CharField(255)
+    min_xtz_amount = fields.CharField(255)
+    max_xtz_amount = fields.CharField(255)
     slash_scale_value = fields.CharField(255)
 
     class Meta:
-        table = 'registry_extra' 
+        table = 'registry_extra'
+
+class TreasuryExtra(Model):
+    id = fields.IntField(pk=True)
+    dao: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
+        "models.DAO"
+    )
+    frozen_extra_value = fields.CharField(255)
+    frozen_scale_value = fields.CharField(255)
+    slash_division_value = fields.CharField(255)
+    min_xtz_amount = fields.CharField(255)
+    max_xtz_amount = fields.CharField(255)
+    slash_scale_value = fields.CharField(255)
+
+    class Meta:
+        table = 'treasury_extra'
+
 
 class Holder(Model):
     id = fields.IntField(pk=True)
@@ -84,7 +106,8 @@ class Holder(Model):
     votes: fields.ReverseRelation["Vote"]
 
     class Meta:
-        table = 'holders' 
+        table = 'holders'
+
 
 class Ledger(Model):
     id = fields.IntField(pk=True)
@@ -98,6 +121,7 @@ class Ledger(Model):
 
     class Meta:
         table = 'ledger'
+
 
 class Proposal(Model):
     id = fields.IntField(pk=True)
@@ -117,7 +141,7 @@ class Proposal(Model):
     votes: fields.ReverseRelation["Vote"]
 
     class Meta:
-        table = 'proposals' 
+        table = 'proposals'
 
 
 class Vote(Model):
