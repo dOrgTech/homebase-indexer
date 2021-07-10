@@ -3,12 +3,12 @@ package: registrydao
 
 database:
   kind: postgres
-  host: ec2-18-215-111-67.compute-1.amazonaws.com
-  port: 5432
-  user: dvbzrwtjytnzqq
-  password: 21d42aa48911445f4944943e35d9c7ab608c765882220753b0d6da5989b9228d
-  database: d5n0dm2b60rj2a
-  schema_name: public
+  host: ${PG_HOST:- }
+  port: ${PG_PORT:- }
+  user: ${PG_USER:- }
+  password: ${PG_PASSWORD:- }
+  database: ${PG_DB:- }
+  schema_name: ${PG_SCHEMA:- }
 
 contracts:
   registry:
