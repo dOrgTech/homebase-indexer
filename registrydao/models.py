@@ -121,6 +121,15 @@ class Ledger(Model):
 
     class Meta:
         table = 'ledger'
+        unique_together = (("dao", "holder"),)
+
+class ProposalStatus(Model):
+    id = fields.IntField(pk=True)
+    description = fields.CharField(36)
+    proposals = fields.ReverseRelation["Proposal"]
+
+    class Meta:
+        table = 'proposal_statuses'
 
 
 class Proposal(Model):
@@ -128,6 +137,8 @@ class Proposal(Model):
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
         "models.DAO", related_name="proposals"
     )
+    hash=fields.CharField(128)
+    key=fields.CharField(128)
     upvotes = fields.CharField(36)
     downvotes = fields.CharField(36)
     start_date = fields.DatetimeField()
@@ -135,10 +146,14 @@ class Proposal(Model):
     proposer: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder", related_name="proposals"
     )
-    voting_stage_num: fields.CharField(50)
-    proposer_frozen_token: fields.CharField(50)
-    quorum_threshold: fields.CharField(50)
+    voting_stage_num=fields.CharField(50)
+    proposer_frozen_token=fields.CharField(50)
+    quorum_threshold=fields.CharField(50)
     votes: fields.ReverseRelation["Vote"]
+
+    status: fields.ForeignKeyRelation[ProposalStatus] = fields.ForeignKeyField(
+        "models.ProposalStatus", related_name="proposals"
+    )
 
     class Meta:
         table = 'proposals'
@@ -146,6 +161,8 @@ class Proposal(Model):
 
 class Vote(Model):
     id = fields.IntField(pk=True)
+    hash=fields.CharField(128)
+    key=fields.CharField(128)
     proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
         "models.Proposal", related_name="votes"
     )

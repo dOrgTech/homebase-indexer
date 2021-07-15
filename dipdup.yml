@@ -34,21 +34,36 @@ templates:
         pattern:
           - type: origination
             originated_contract: <contract>
-      # - callback: on_propose
-      #   pattern:
-      #     - type: transaction
-      #       destination: <contract>
-      #       entrypoint: propose
-      # - callback: on_flush
-      #   pattern:
-      #     - type: transaction
-      #       destination: <contract>
-      #       entrypoint: flush
-      # - callback: on_drop_proposal
-      #   pattern:
-      #     - type: transaction
-      #       destination: <contract>
-      #       entrypoint: drop_proposal
+      - callback: on_propose
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: propose
+      - callback: on_flush
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: flush
+      - callback: on_freeze
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: freeze
+      - callback: on_vote
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: vote
+      - callback: on_unfreeze
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: unfreeze
+      - callback: on_drop_proposal
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: drop_proposal
 
 indexes:
   factory:
@@ -61,6 +76,36 @@ indexes:
           pattern:
             - type: origination
               similar_to: registry
+        - callback: on_freeze
+          pattern:
+            - type: transaction
+              destination: registry
+              entrypoint: freeze
+        - callback: on_unfreeze
+          pattern:
+            - type: transaction
+              destination: registry
+              entrypoint: unfreeze
+        - callback: on_propose
+          pattern:
+            - type: transaction
+              destination: registry
+              entrypoint: propose
+        - callback: on_vote
+          pattern:
+            - type: transaction
+              destination: registry
+              entrypoint: vote
+        - callback: on_drop_proposal
+          pattern:
+            - type: transaction
+              destination: registry
+              entrypoint: drop_proposal
+        - callback: on_flush
+          pattern:
+            - type: transaction
+              destination: registry
+              entrypoint: flush
     stateless: True
   temp:
     template: registry_dao

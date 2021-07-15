@@ -1,19 +1,12 @@
 from datetime import datetime
+from registrydao.constants import BETTER_CALL_DEV_API
+from registrydao.utils.http import fetch
 
-import aiohttp
 from dipdup.context import HandlerContext
 from dipdup.models import Origination
 
 import registrydao.models as models
 from registrydao.types.registry.storage import RegistryStorage
-
-
-async def fetch(url: str):
-    async with aiohttp.ClientSession() as session:
-        resp = await session.get(url)
-        json_resp = await resp.json()
-        return json_resp
-
 
 def find_in_json(key_to_compare: str, key_name: str, data):
     for i in data:
@@ -30,11 +23,11 @@ async def on_origination(
     dao_address = registry_origination.data.originated_contract_address
 
     fetched_token = (await fetch(
-        f'https://api.better-call.dev/v1/tokens/florencenet/metadata?contract={token_address}&token_id={token_id}'))[0]
+        f'{BETTER_CALL_DEV_API}/tokens/florencenet/metadata?contract={token_address}&token_id={token_id}'))[0]
 
     network = fetched_token["network"]
 
-    fetched_metadata = await fetch(f'https://api.better-call.dev/v1/account/{network}/{dao_address}/metadata')
+    fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{network}/{dao_address}/metadata')
 
     dao_type = fetched_metadata['extras']['template']
 
@@ -80,8 +73,6 @@ async def on_origination(
 
     extra_map_number = registry_origination.data.storage['extra']
     fetched_extra = await fetch(f'https://api.{network}.tzkt.io/v1/bigmaps/{extra_map_number}/keys')
-
-    print(fetched_extra)
 
     if dao_type == 'registry':
         await models.RegistryExtra.create(
