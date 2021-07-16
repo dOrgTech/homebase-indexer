@@ -21,6 +21,13 @@ datasources:
     url: https://api.florencenet.tzkt.io
 
 templates:
+  dao_big_map:
+    kind: big_map
+    datasource: tzkt
+    handlers:
+      - callback: <handler>
+        contract: <contract>
+        path: <path>
   registry_dao:
     kind: operation
     datasource: tzkt
@@ -44,21 +51,11 @@ templates:
           - type: transaction
             destination: <contract>
             entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: freeze
       - callback: on_vote
         pattern:
           - type: transaction
             destination: <contract>
             entrypoint: vote
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: unfreeze
       - callback: on_drop_proposal
         pattern:
           - type: transaction
@@ -76,16 +73,6 @@ indexes:
           pattern:
             - type: origination
               similar_to: registry
-        - callback: on_freeze
-          pattern:
-            - type: transaction
-              destination: registry
-              entrypoint: freeze
-        - callback: on_unfreeze
-          pattern:
-            - type: transaction
-              destination: registry
-              entrypoint: unfreeze
         - callback: on_propose
           pattern:
             - type: transaction
@@ -107,7 +94,19 @@ indexes:
               destination: registry
               entrypoint: flush
     stateless: True
-  temp:
+  dao:
     template: registry_dao
     values:
       contract: registry
+  dao_ledger:
+    template: dao_big_map
+    values:
+      contract: registry
+      path: ledger
+      handler: on_ledger_map_update
+  dao_extra:
+    template: dao_big_map
+    values:
+      contract: registry
+      path: extra
+      handler: on_extra_map_update
