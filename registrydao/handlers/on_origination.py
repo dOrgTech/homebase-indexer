@@ -1,4 +1,5 @@
 from datetime import datetime
+from os import environ
 from registrydao.constants import BETTER_CALL_DEV_API
 from registrydao.utils.http import fetch
 
@@ -18,14 +19,13 @@ async def on_origination(
         ctx: HandlerContext,
         registry_origination: Origination[RegistryStorage],
 ) -> None:
+    network = environ.get('NETWORK')
     token_address = registry_origination.data.storage['governance_token']['address']
     token_id = registry_origination.data.storage['governance_token']['token_id']
     dao_address = registry_origination.data.originated_contract_address
 
     fetched_token = (await fetch(
-        f'{BETTER_CALL_DEV_API}/tokens/florencenet/metadata?contract={token_address}&token_id={token_id}'))[0]
-
-    network = fetched_token["network"]
+        f'{BETTER_CALL_DEV_API}/tokens/{network}/metadata?contract={token_address}&token_id={token_id}'))[0]
 
     fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{network}/{dao_address}/metadata')
 

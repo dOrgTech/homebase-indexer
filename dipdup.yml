@@ -18,7 +18,7 @@ contracts:
 datasources:
   tzkt:
     kind: tzkt
-    url: https://api.florencenet.tzkt.io
+    url: https://api.${NETWORK:- }.tzkt.io
 
 templates:
   dao_big_map:
