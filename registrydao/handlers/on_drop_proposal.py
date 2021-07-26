@@ -1,5 +1,5 @@
 from typing import Optional
-
+from datetime import datetime
 from dipdup.models import OperationData, Origination, Transaction
 from dipdup.context import HandlerContext
 
@@ -16,5 +16,5 @@ async def on_drop_proposal(
 
     status = await models.ProposalStatus.get(description='dropped')
     proposal = await models.Proposal.get(key=drop_proposal.data.parameter_json)
-    proposal.status = status
-    await proposal.save()
+    
+    await models.ProposalStatusUpdates.get_or_create(status=status, proposal=proposal, timestamp=drop_proposal.data.timestamp)

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict, Optional
 
 from dipdup.models import OperationData, Origination, Transaction
@@ -21,10 +22,14 @@ async def on_flush(
 
     created_status = await models.ProposalStatus.get(description='created')
     executed_status = await models.ProposalStatus.get(description='executed')
-    created_proposals = await models.Proposal.filter(dao=dao, status=created_status)
+    dropped_status = await models.ProposalStatus.get(description='dropped')
+    created_proposals = await models.Proposal.filter(dao=dao, status_updates__status=created_status)
 
     for i in range(len(created_proposals)):
         if created_proposals[i].key not in non_flushed_or_executed_keys:
-            created_proposals[i].status = executed_status
-            await created_proposals[i].save()
-
+            is_passed = int(created_proposals[i].upvotes) >= int(created_proposals[i].quorum_threshold)
+            is_dropped = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=dropped_status)
+            is_executed = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=executed_status)
+            
+            if is_passed and is_dropped != True and is_executed != True:
+                await models.ProposalStatusUpdates.get_or_create(status=executed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp)

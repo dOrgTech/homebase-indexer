@@ -1,5 +1,5 @@
 from datetime import datetime
-from os import environ
+from registrydao.utils.ctx import extract_network_from_ctx
 from registrydao.constants import BETTER_CALL_DEV_API
 from registrydao.utils.http import fetch
 
@@ -19,7 +19,7 @@ async def on_origination(
         ctx: HandlerContext,
         registry_origination: Origination[RegistryStorage],
 ) -> None:
-    network = environ.get('NETWORK')
+    network = extract_network_from_ctx(ctx)
     token_address = registry_origination.data.storage['governance_token']['address']
     token_id = registry_origination.data.storage['governance_token']['token_id']
     dao_address = registry_origination.data.originated_contract_address
@@ -33,21 +33,32 @@ async def on_origination(
 
     type = await models.DAOType.get_or_create(name=dao_type)
 
+    if 'level' in fetched_token:
+        level = fetched_token["level"]
+    else:
+        level = -1
+
+    if 'should_prefer_symbol' in fetched_token:
+        should_prefer_symbol = fetched_token['should_prefer_symbol']
+    else:
+        should_prefer_symbol = True
+
     token = await models.Token.get_or_create(
         contract=fetched_token["contract"],
         network=network,
-        level=fetched_token["level"],
+        level=level,
         timestamp=datetime.strptime(fetched_token["timestamp"], '%Y-%m-%dT%H:%M:%SZ'),
         token_id=fetched_token["token_id"],
         symbol=fetched_token["symbol"],
         name=fetched_token["name"],
         decimals=fetched_token["decimals"],
         is_transferable=fetched_token["is_transferable"],
-        should_prefer_symbol=fetched_token["should_prefer_symbol"],
+        should_prefer_symbol=should_prefer_symbol,
         supply=fetched_token["supply"]
     )
 
     dao = await models.DAO.get_or_create(
+        admin=registry_origination.data.storage['admin'],
         address=dao_address,
         frozen_token_id=registry_origination.data.storage['frozen_token_id'],
         guardian=registry_origination.data.storage['guardian'],
@@ -61,7 +72,7 @@ async def on_origination(
         proposal_flush_time=registry_origination.data.storage['proposal_flush_time'],
         quorum_change=registry_origination.data.storage['quorum_change'],
         last_updated_cycle=registry_origination.data.storage['quorum_threshold_at_cycle']['last_updated_cycle'],
-        quorum_threshold=registry_origination.data.storage['quorum_threshold_at_cycle']['quorum_threshold'],
+        quorum_threshold=round((int(registry_origination.data.storage['quorum_threshold_at_cycle']['quorum_threshold']) / 1000000) * int(fetched_token["supply"])),
         staked=registry_origination.data.storage['quorum_threshold_at_cycle']['staked'],
         start_time=datetime.strptime(registry_origination.data.storage['start_time'], '%Y-%m-%dT%H:%M:%SZ'),
         network=network,
@@ -75,7 +86,7 @@ async def on_origination(
     fetched_extra = await fetch(f'https://api.{network}.tzkt.io/v1/bigmaps/{extra_map_number}/keys')
 
     if dao_type == 'registry':
-        await models.RegistryExtra.create(
+        await models.RegistryExtra.get_or_create(
             registry=find_in_json('key', 'registry', fetched_extra)['value'],
             registry_affected=find_in_json('key', 'registry_affected', fetched_extra)['value'],
             frozen_extra_value=find_in_json('key', 'frozen_extra_value', fetched_extra)['value'],
@@ -87,7 +98,7 @@ async def on_origination(
             dao=dao[0]
         )
     else:
-        await models.TreasuryExtra.create(
+        await models.TreasuryExtra.get_or_create(
             frozen_extra_value=find_in_json('key', 'frozen_extra_value', fetched_extra)['value'],
             frozen_scale_value=find_in_json('key', 'frozen_scale_value', fetched_extra)['value'],
             slash_division_value=find_in_json('key', 'slash_division_value', fetched_extra)['value'],

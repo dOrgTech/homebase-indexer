@@ -1,36 +1,49 @@
-spec_version: 1.0
+spec_version: 1.1
 package: registrydao
 
 database:
   kind: postgres
-  host: ${PG_HOST:- }
-  port: ${PG_PORT:- }
-  user: ${PG_USER:- }
-  password: ${PG_PASSWORD:- }
+  host: ${PG_HOST:-changeme}
+  port: ${PG_PORT:-changeme}
+  user: ${PG_USER:-changeme}
+  password: ${PG_PASSWORD:-changeme}
   database: ${PG_DB:- }
-  schema_name: ${PG_SCHEMA:- }
+  schema_name: ${PG_SCHEMA:-changeme}
 
 contracts:
-  registry:
+  registry_florence:
     address: KT1ERUQ1biQTsQ1ShyEZmsDWnkqkXpumhz3k
+    typename: registry
+  registry_mainnet:
+    address: KT1NrAnSjrjp3Bycaw8YKPrDq2aXUTHhq8MF
     typename: registry
 
 datasources:
-  tzkt:
+  tzkt_florencenet:
     kind: tzkt
-    url: https://api.${NETWORK:- }.tzkt.io
+    url: https://api.florencenet.tzkt.io
+  tzkt_mainnet:
+    kind: tzkt
+    url: https://api.mainnet.tzkt.io
 
 templates:
-  dao_big_map:
+  dao_ledger_big_map:
     kind: big_map
-    datasource: tzkt
+    datasource: <datasource>
     handlers:
-      - callback: <handler>
+      - callback: on_ledger_map_update
         contract: <contract>
-        path: <path>
+        path: ledger
+  dao_extra_big_map:
+    kind: big_map
+    datasource: <datasource>
+    handlers:
+      - callback: on_extra_map_update
+        contract: <contract>
+        path: extra
   registry_dao:
     kind: operation
-    datasource: tzkt
+    datasource: <datasource>
     types:
       - transaction
       - origination
@@ -63,50 +76,100 @@ templates:
             entrypoint: drop_proposal
 
 indexes:
-  factory:
+  factory_florence:
     kind: operation
-    datasource: tzkt
+    datasource: tzkt_florencenet
     types:
       - origination
     handlers:
         - callback: on_factory_origination
           pattern:
             - type: origination
-              similar_to: registry
+              similar_to: registry_florence
         - callback: on_propose
           pattern:
             - type: transaction
-              destination: registry
+              destination: registry_florence
               entrypoint: propose
         - callback: on_vote
           pattern:
             - type: transaction
-              destination: registry
+              destination: registry_florence
               entrypoint: vote
         - callback: on_drop_proposal
           pattern:
             - type: transaction
-              destination: registry
+              destination: registry_florence
               entrypoint: drop_proposal
         - callback: on_flush
           pattern:
             - type: transaction
-              destination: registry
+              destination: registry_florence
               entrypoint: flush
     stateless: True
-  dao:
+  dao_florence:
     template: registry_dao
     values:
-      contract: registry
-  dao_ledger:
-    template: dao_big_map
+      contract: registry_florence
+      datasource: tzkt_florencenet
+  dao_ledger_florence:
+    template: dao_ledger_big_map
     values:
-      contract: registry
-      path: ledger
-      handler: on_ledger_map_update
-  dao_extra:
-    template: dao_big_map
+      contract: registry_florence
+      datasource: tzkt_florencenet
+  dao_extra_florence:
+    template: dao_extra_big_map
     values:
-      contract: registry
-      path: extra
-      handler: on_extra_map_update
+      contract: registry_florence
+      datasource: tzkt_florencenet
+  
+  factory_mainnet:
+    kind: operation
+    datasource: tzkt_mainnet
+    types:
+      - origination
+    handlers:
+        - callback: on_factory_origination
+          pattern:
+            - type: origination
+              similar_to: registry_mainnet
+        - callback: on_propose
+          pattern:
+            - type: transaction
+              destination: registry_mainnet
+              entrypoint: propose
+        - callback: on_vote
+          pattern:
+            - type: transaction
+              destination: registry_mainnet
+              entrypoint: vote
+        - callback: on_drop_proposal
+          pattern:
+            - type: transaction
+              destination: registry_mainnet
+              entrypoint: drop_proposal
+        - callback: on_flush
+          pattern:
+            - type: transaction
+              destination: registry_mainnet
+              entrypoint: flush
+    stateless: True
+  dao_mainnet:
+    template: registry_dao
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  dao_ledger_mainnet:
+    template: dao_ledger_big_map
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  dao_extra_mainnet:
+    template: dao_extra_big_map
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+
+# hasura:
+#   url: ${HASURA_URL:- }
+#   admin_secret: ${HASURA_SECRET:-changeme}

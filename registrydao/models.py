@@ -38,6 +38,7 @@ class DAO(Model):
     governance_token: fields.ForeignKeyRelation[Token] = fields.ForeignKeyField(
         "models.Token", related_name="daos"
     )
+    admin = fields.CharField(36)
     guardian = fields.CharField(36)
     ledger: fields.ReverseRelation["Ledger"]
     proposals: fields.ReverseRelation["Proposal"]
@@ -126,7 +127,7 @@ class Ledger(Model):
 class ProposalStatus(Model):
     id = fields.IntField(pk=True)
     description = fields.CharField(36)
-    proposals = fields.ReverseRelation["Proposal"]
+    status_updates = fields.ReverseRelation["ProposalStatusUpdates"]
 
     class Meta:
         table = 'proposal_statuses'
@@ -150,10 +151,7 @@ class Proposal(Model):
     proposer_frozen_token=fields.CharField(50)
     quorum_threshold=fields.CharField(50)
     votes: fields.ReverseRelation["Vote"]
-
-    status: fields.ForeignKeyRelation[ProposalStatus] = fields.ForeignKeyField(
-        "models.ProposalStatus", related_name="proposals"
-    )
+    status_updates: fields.ReverseRelation["ProposalStatusUpdates"]
 
     class Meta:
         table = 'proposals'
@@ -174,3 +172,16 @@ class Vote(Model):
 
     class Meta:
         table = 'votes'
+
+class ProposalStatusUpdates(Model):
+    id = fields.IntField(pk=True)
+    timestamp = fields.DatetimeField()
+    status: fields.ForeignKeyRelation[ProposalStatus] = fields.ForeignKeyField(
+        "models.ProposalStatus", related_name="status_updates"
+    )
+    proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
+        "models.Proposal", related_name="status_updates"
+    )
+
+    class Meta:
+        table = 'status_updates'
