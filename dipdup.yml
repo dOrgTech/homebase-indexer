@@ -27,20 +27,6 @@ datasources:
     url: https://api.mainnet.tzkt.io
 
 templates:
-  dao_ledger_big_map:
-    kind: big_map
-    datasource: <datasource>
-    handlers:
-      - callback: on_ledger_map_update
-        contract: <contract>
-        path: ledger
-  dao_extra_big_map:
-    kind: big_map
-    datasource: <datasource>
-    handlers:
-      - callback: on_extra_map_update
-        contract: <contract>
-        path: extra
   registry_dao:
     kind: operation
     datasource: <datasource>
@@ -74,6 +60,16 @@ templates:
           - type: transaction
             destination: <contract>
             entrypoint: drop_proposal
+      - callback: on_freeze
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: freeze
+      - callback: on_unfreeze
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: freeze
 
 indexes:
   factory_florence:
@@ -106,19 +102,19 @@ indexes:
             - type: transaction
               destination: registry_florence
               entrypoint: flush
+        - callback: on_freeze
+          pattern:
+            - type: transaction
+              destination: registry_florence
+              entrypoint: freeze
+        - callback: on_unfreeze
+          pattern:
+            - type: transaction
+              destination: registry_florence
+              entrypoint: unfreeze
     stateless: True
   dao_florence:
     template: registry_dao
-    values:
-      contract: registry_florence
-      datasource: tzkt_florencenet
-  dao_ledger_florence:
-    template: dao_ledger_big_map
-    values:
-      contract: registry_florence
-      datasource: tzkt_florencenet
-  dao_extra_florence:
-    template: dao_extra_big_map
     values:
       contract: registry_florence
       datasource: tzkt_florencenet
@@ -153,19 +149,19 @@ indexes:
             - type: transaction
               destination: registry_mainnet
               entrypoint: flush
+        - callback: on_freeze
+          pattern:
+            - type: transaction
+              destination: registry_florence
+              entrypoint: freeze
+        - callback: on_unfreeze
+          pattern:
+            - type: transaction
+              destination: registry_florence
+              entrypoint: unfreeze
     stateless: True
   dao_mainnet:
     template: registry_dao
-    values:
-      contract: registry_mainnet
-      datasource: tzkt_mainnet
-  dao_ledger_mainnet:
-    template: dao_ledger_big_map
-    values:
-      contract: registry_mainnet
-      datasource: tzkt_mainnet
-  dao_extra_mainnet:
-    template: dao_extra_big_map
     values:
       contract: registry_mainnet
       datasource: tzkt_mainnet

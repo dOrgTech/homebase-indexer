@@ -1,7 +1,7 @@
-from datetime import datetime
-from typing import Dict, Optional
+from registrydao.utils.extra import update_extra
+from registrydao.utils.ledger import update_ledger
 
-from dipdup.models import OperationData, Origination, Transaction
+from dipdup.models import Transaction
 from dipdup.context import HandlerContext
 
 import registrydao.models as models
@@ -16,9 +16,13 @@ async def on_flush(
     ctx: HandlerContext,
     flush: Transaction[FlushParameter, RegistryStorage],
 ) -> None:
+
     non_flushed_or_executed_keys = map(extract_key, flush.data.storage['proposal_key_list_sort_by_date'])
     dao_address = flush.data.target_address
     dao = await models.DAO.get(address=dao_address)
+    
+    await update_ledger(dao_address, flush.data.diffs)
+    await update_extra(dao_address, flush.data.diffs)
 
     created_status = await models.ProposalStatus.get(description='created')
     executed_status = await models.ProposalStatus.get(description='executed')

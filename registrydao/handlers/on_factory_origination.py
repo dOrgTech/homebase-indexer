@@ -27,13 +27,3 @@ async def on_factory_origination(
             template='registry_dao',
             values=dict(contract=originated_contract, datasource=f'tzkt_{network}'),
         )
-        ctx.add_index(
-            name=f'dao_ledger_{originated_contract}',
-            template='dao_ledger_big_map',
-            values=dict(contract=originated_contract, datasource=f'tzkt_{network}'),
-        )
-        ctx.add_index(
-            name=f'dao_extra_{originated_contract}',
-            template='dao_extra_big_map',
-            values=dict(contract=originated_contract, datasource=f'tzkt_{network}'),
-        )

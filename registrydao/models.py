@@ -56,7 +56,7 @@ class DAO(Model):
     staked = fields.CharField(255)
     start_time = fields.DatetimeField()
     name = fields.CharField(255)
-    description = fields.CharField(255)
+    description = fields.CharField(2500)
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAOType", related_name="daos"
     )
@@ -143,7 +143,7 @@ class Proposal(Model):
     upvotes = fields.CharField(36)
     downvotes = fields.CharField(36)
     start_date = fields.DatetimeField()
-    metadata = fields.CharField(512)
+    metadata = fields.CharField(10000)
     proposer: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder", related_name="proposals"
     )

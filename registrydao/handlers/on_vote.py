@@ -19,7 +19,7 @@ async def on_vote(
 
     dao = await models.DAO.get(address=dao_address)
     proposal = await models.Proposal.get(key=vote_diff['key'], dao=dao)
-    voter = await models.Holder.get(address=vote_diff['value']['voters'][0]['voter_address'])
+    voter = await models.Holder.get_or_create(address=vote_diff['value']['voters'][0]['voter_address'])
     support = vote_diff['value']['voters'][0]['vote_type']
     amount = vote_diff['value']['voters'][0]['vote_amount']
     passed_status = await models.ProposalStatus.get_or_create(description="passed")
@@ -31,7 +31,7 @@ async def on_vote(
         proposal=proposal,
         amount=amount,
         support=support,
-        voter=voter
+        voter=voter[0]
     )
 
     if support == True:

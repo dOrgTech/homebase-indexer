@@ -1,3 +1,4 @@
+from registrydao.utils.ledger import update_ledger
 from typing import Optional
 from datetime import datetime
 
@@ -17,6 +18,8 @@ async def on_propose(
     dao_address = propose.data.target_address
     proposal_diff = propose.data.diffs[0]['content']
     
+    await update_ledger(dao_address, propose.data.diffs)
+
     dao = await models.DAO.get(address=dao_address).prefetch_related('governance_token')
     proposer = await models.Holder.get_or_create(address=proposal_diff['value']['proposer'])
     created_status = await models.ProposalStatus.get(description='created')
