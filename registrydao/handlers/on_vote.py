@@ -1,3 +1,4 @@
+from registrydao.utils.ledger import update_ledger
 from typing import Optional
 
 from dipdup.models import OperationData, Origination, Transaction
@@ -24,6 +25,8 @@ async def on_vote(
     amount = vote_diff['value']['voters'][0]['vote_amount']
     passed_status = await models.ProposalStatus.get_or_create(description="passed")
     rejected_status = await models.ProposalStatus.get_or_create(description="rejected")
+
+    await update_ledger(vote.data.target_address, vote.data.diffs)
 
     await models.Vote.get_or_create(
         key=vote_diff['key'],
