@@ -3,9 +3,13 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra, Field
 
 
 class ProposeParameter(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    from_: str = Field(..., alias='from')
     frozen_token: str
     proposal_metadata: str
