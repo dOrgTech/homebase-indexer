@@ -20,7 +20,7 @@ async def wait_and_fetch_metadata(network: str, dao_address: str):
 
     while fetched_metadata == None:
         print(f'Metadata not yet indexed for DAO {dao_address}')
-        await sleep(3)
+        await sleep(5)
         fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{network}/{dao_address}/metadata')
 
     return fetched_metadata
