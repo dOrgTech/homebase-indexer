@@ -12,11 +12,11 @@ database:
 
 contracts:
   registry_florence:
-    address: KT1ERUQ1biQTsQ1ShyEZmsDWnkqkXpumhz3k
+    address: KT1HDk4DxrxjQntn12sum5xWCWxEPdjnhd5X
     typename: registry
-  registry_mainnet:
-    address: KT1NrAnSjrjp3Bycaw8YKPrDq2aXUTHhq8MF
-    typename: registry
+  # registry_mainnet:
+  #   address: KT1NrAnSjrjp3Bycaw8YKPrDq2aXUTHhq8MF
+  #   typename: registry
 
 datasources:
   tzkt_florencenet:
@@ -69,7 +69,7 @@ templates:
         pattern:
           - type: transaction
             destination: <contract>
-            entrypoint: freeze
+            entrypoint: unfreeze
 
 indexes:
   factory_florence:
@@ -78,94 +78,93 @@ indexes:
     types:
       - origination
     handlers:
-        - callback: on_factory_origination
-          pattern:
-            - type: origination
-              similar_to: registry_florence
-        - callback: on_propose
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: propose
-        - callback: on_vote
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: vote
-        - callback: on_drop_proposal
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: drop_proposal
-        - callback: on_flush
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: flush
-        - callback: on_freeze
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: freeze
-        - callback: on_unfreeze
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: unfreeze
+      - callback: on_factory_origination
+        pattern:
+          - type: origination
+            similar_to: registry_florence
+      - callback: on_propose
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: propose
+      - callback: on_vote
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: vote
+      - callback: on_drop_proposal
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: drop_proposal
+      - callback: on_flush
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: flush
+      - callback: on_freeze
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: freeze
+      - callback: on_unfreeze
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: unfreeze
     stateless: True
   dao_florence:
     template: registry_dao
     values:
       contract: registry_florence
       datasource: tzkt_florencenet
-  
-  factory_mainnet:
-    kind: operation
-    datasource: tzkt_mainnet
-    types:
-      - origination
-    handlers:
-        - callback: on_factory_origination
-          pattern:
-            - type: origination
-              similar_to: registry_mainnet
-        - callback: on_propose
-          pattern:
-            - type: transaction
-              destination: registry_mainnet
-              entrypoint: propose
-        - callback: on_vote
-          pattern:
-            - type: transaction
-              destination: registry_mainnet
-              entrypoint: vote
-        - callback: on_drop_proposal
-          pattern:
-            - type: transaction
-              destination: registry_mainnet
-              entrypoint: drop_proposal
-        - callback: on_flush
-          pattern:
-            - type: transaction
-              destination: registry_mainnet
-              entrypoint: flush
-        - callback: on_freeze
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: freeze
-        - callback: on_unfreeze
-          pattern:
-            - type: transaction
-              destination: registry_florence
-              entrypoint: unfreeze
-    stateless: True
-  dao_mainnet:
-    template: registry_dao
-    values:
-      contract: registry_mainnet
-      datasource: tzkt_mainnet
 
+  # factory_mainnet:
+  #   kind: operation
+  #   datasource: tzkt_mainnet
+  #   types:
+  #     - origination
+  #   handlers:
+  #       - callback: on_factory_origination
+  #         pattern:
+  #           - type: origination
+  #             similar_to: registry_mainnet
+  #       - callback: on_propose
+  #         pattern:
+  #           - type: transaction
+  #             destination: registry_mainnet
+  #             entrypoint: propose
+  #       - callback: on_vote
+  #         pattern:
+  #           - type: transaction
+  #             destination: registry_mainnet
+  #             entrypoint: vote
+  #       - callback: on_drop_proposal
+  #         pattern:
+  #           - type: transaction
+  #             destination: registry_mainnet
+  #             entrypoint: drop_proposal
+  #       - callback: on_flush
+  #         pattern:
+  #           - type: transaction
+  #             destination: registry_mainnet
+  #             entrypoint: flush
+  #       - callback: on_freeze
+  #         pattern:
+  #           - type: transaction
+  #             destination: registry_florence
+  #             entrypoint: freeze
+  #       - callback: on_unfreeze
+  #         pattern:
+  #           - type: transaction
+  #             destination: registry_florence
+  #             entrypoint: unfreeze
+  #   stateless: True
+  # dao_mainnet:
+  #   template: registry_dao
+  #   values:
+  #     contract: registry_mainnet
+  #     datasource: tzkt_mainnet
 # hasura:
 #   url: ${HASURA_URL:- }
 #   admin_secret: ${HASURA_SECRET:-changeme}

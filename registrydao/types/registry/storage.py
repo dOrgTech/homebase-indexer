@@ -5,10 +5,29 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
+
+
+class Key(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    delegate: str
+    owner: str
+
+
+class Delegate(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    key: Key
+    value: Dict[str, Any]
 
 
 class FreezeHistory(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     current_stage_num: str
     current_unstaked: str
     past_unstaked: str
@@ -16,89 +35,92 @@ class FreezeHistory(BaseModel):
 
 
 class GovernanceToken(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     address: str
     token_id: str
 
 
-class Key(BaseModel):
-    address: str
+class ProposalKeyListSortByLevelItem(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    bytes: str
     nat: str
 
 
-class LedgerItem(BaseModel):
-    key: Key
-    value: str
-
-
 class Key1(BaseModel):
-    operator: str
-    owner: str
-    token_id: str
+    class Config:
+        extra = Extra.forbid
 
-
-class Operator(BaseModel):
-    key: Key1
-    value: Dict[str, Any]
-
-
-class ProposalKeyListSortByDateItem(BaseModel):
-    bytes: str
-    timestamp: str
+    address: str
+    bool: bool
 
 
 class Voter(BaseModel):
-    vote_amount: str
-    vote_type: bool
-    voter_address: str
+    class Config:
+        extra = Extra.forbid
+
+    key: Key1
+    value: str
 
 
 class Proposals(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     downvotes: str
     metadata: str
     proposer: str
     proposer_frozen_token: str
     quorum_threshold: str
-    start_date: str
+    start_level: str
     upvotes: str
     voters: List[Voter]
     voting_stage_num: str
 
 
 class QuorumThresholdAtCycle(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     last_updated_cycle: str
     quorum_threshold: str
     staked: str
 
 
 class RegistryStorage(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     admin: str
     custom_entrypoints: Dict[str, str]
     decision_lambda: str
+    delegates: List[Delegate]
     extra: Dict[str, str]
     fixed_proposal_fee_in_token: str
     freeze_history: Dict[str, FreezeHistory]
     frozen_token_id: str
+    frozen_total_supply: str
     governance_token: GovernanceToken
     governance_total_supply: str
     guardian: str
-    ledger: List[LedgerItem]
     max_proposals: str
     max_quorum_change: str
     max_quorum_threshold: str
-    max_votes: str
+    max_voters: str
     metadata: Dict[str, str]
     min_quorum_threshold: str
-    operators: List[Operator]
     pending_owner: str
     period: str
     permits_counter: str
     proposal_check: str
-    proposal_expired_time: str
-    proposal_flush_time: str
-    proposal_key_list_sort_by_date: List[ProposalKeyListSortByDateItem]
+    proposal_expired_level: str
+    proposal_flush_level: str
+    proposal_key_list_sort_by_level: List[ProposalKeyListSortByLevelItem]
     proposals: Dict[str, Proposals]
     quorum_change: str
     quorum_threshold_at_cycle: QuorumThresholdAtCycle
-    rejected_proposal_return_value: str
-    start_time: str
-    total_supply: Dict[str, str]
+    rejected_proposal_slash_value: str
+    start_level: str

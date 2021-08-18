@@ -23,7 +23,7 @@ async def on_propose(
     dao = await models.DAO.get(address=dao_address).prefetch_related('governance_token')
     proposer = await models.Holder.get_or_create(address=proposal_diff['value']['proposer'])
     created_status = await models.ProposalStatus.get(description='created')
-    start_date = datetime.strptime(proposal_diff['value']['start_date'], '%Y-%m-%dT%H:%M:%SZ')
+    start_date = propose.data.timestamp
 
     proposal = await models.Proposal.get_or_create(
         dao=dao,
@@ -32,6 +32,7 @@ async def on_propose(
         defaults={
             'upvotes': proposal_diff['value']['upvotes'],
             'start_date': start_date,
+            'start_level': proposal_diff['value']['start_level'],
             'metadata': proposal_diff['value']['metadata'],
             'proposer': proposer[0],
             'downvotes': proposal_diff['value']['downvotes'],

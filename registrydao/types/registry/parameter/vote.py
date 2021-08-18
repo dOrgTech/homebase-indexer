@@ -5,21 +5,31 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra, Field
 
 
 class Argument(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    from_: str = Field(..., alias='from')
     proposal_key: str
-    vote_type: bool
     vote_amount: str
+    vote_type: bool
 
 
 class PermitItem(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     key: str
     signature: str
 
 
 class VoteParameterItem(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     argument: Argument
     permit: Optional[PermitItem]
 
