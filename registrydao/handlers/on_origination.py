@@ -1,3 +1,4 @@
+from asyncio import sleep
 from datetime import datetime
 from registrydao.utils.ctx import extract_network_from_ctx
 from registrydao.constants import BETTER_CALL_DEV_API
@@ -14,6 +15,16 @@ def find_in_json(key_to_compare: str, key_name: str, data):
         if i[key_to_compare] == key_name:
             return i
 
+async def wait_and_fetch_metadata(network: str, dao_address: str):
+    fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{network}/{dao_address}/metadata')
+
+    while fetched_metadata == None:
+        print(f'Metadata not yet indexed for DAO {dao_address}')
+        await sleep(5)
+        fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{network}/{dao_address}/metadata')
+
+    return fetched_metadata
+    
 
 async def on_origination(
         ctx: HandlerContext,
@@ -27,8 +38,7 @@ async def on_origination(
     fetched_token = (await fetch(
         f'{BETTER_CALL_DEV_API}/tokens/{network}/metadata?contract={token_address}&token_id={token_id}'))[0]
 
-    fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{network}/{dao_address}/metadata')
-
+    fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
     dao_type = fetched_metadata['extras']['template']
 
     type = await models.DAOType.get_or_create(name=dao_type)
@@ -65,16 +75,16 @@ async def on_origination(
         max_proposals=registry_origination.data.storage['max_proposals'],
         max_quorum_change=registry_origination.data.storage['max_quorum_change'],
         max_quorum_threshold=registry_origination.data.storage['max_quorum_threshold'],
-        max_votes=registry_origination.data.storage['max_votes'],
+        max_voters=registry_origination.data.storage['max_voters'],
         min_quorum_threshold=registry_origination.data.storage['min_quorum_threshold'],
         period=registry_origination.data.storage['period'],
-        proposal_expired_time=registry_origination.data.storage['proposal_expired_time'],
-        proposal_flush_time=registry_origination.data.storage['proposal_flush_time'],
+        proposal_expired_level=registry_origination.data.storage['proposal_expired_level'],
+        proposal_flush_level=registry_origination.data.storage['proposal_flush_level'],
         quorum_change=registry_origination.data.storage['quorum_change'],
         last_updated_cycle=registry_origination.data.storage['quorum_threshold_at_cycle']['last_updated_cycle'],
         quorum_threshold=round((int(registry_origination.data.storage['quorum_threshold_at_cycle']['quorum_threshold']) / 1000000) * int(fetched_token["supply"])),
         staked=registry_origination.data.storage['quorum_threshold_at_cycle']['staked'],
-        start_time=datetime.strptime(registry_origination.data.storage['start_time'], '%Y-%m-%dT%H:%M:%SZ'),
+        start_level=registry_origination.data.storage['start_level'],
         network=network,
         name=fetched_metadata['name'],
         description=fetched_metadata['description'],

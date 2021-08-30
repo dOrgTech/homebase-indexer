@@ -17,7 +17,7 @@ async def on_flush(
     flush: Transaction[FlushParameter, RegistryStorage],
 ) -> None:
 
-    non_flushed_or_executed_keys = map(extract_key, flush.data.storage['proposal_key_list_sort_by_date'])
+    non_flushed_or_executed_keys = map(extract_key, flush.data.storage['proposal_key_list_sort_by_level'])
     dao_address = flush.data.target_address
     dao = await models.DAO.get(address=dao_address)
     
@@ -36,4 +36,4 @@ async def on_flush(
             is_executed = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=executed_status)
             
             if is_passed and is_dropped != True and is_executed != True:
-                await models.ProposalStatusUpdates.get_or_create(status=executed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp)
+                await models.ProposalStatusUpdates.get_or_create(status=executed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp, level=flush.data.level)

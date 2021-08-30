@@ -45,16 +45,16 @@ class DAO(Model):
     max_proposals = fields.CharField(255)
     max_quorum_change = fields.CharField(255)
     max_quorum_threshold = fields.CharField(255)
-    max_votes = fields.CharField(255)
+    max_voters = fields.CharField(255)
     min_quorum_threshold = fields.CharField(255)
     period = fields.CharField(255)
-    proposal_expired_time = fields.CharField(255)
-    proposal_flush_time = fields.CharField(255)
+    proposal_expired_level = fields.IntField()
+    proposal_flush_level = fields.IntField()
     quorum_change = fields.CharField(255)
     last_updated_cycle = fields.CharField(255)
     quorum_threshold = fields.CharField(255)
     staked = fields.CharField(255)
-    start_time = fields.DatetimeField()
+    start_level = fields.IntField()
     name = fields.CharField(255)
     description = fields.CharField(2500)
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
@@ -112,7 +112,10 @@ class Holder(Model):
 
 class Ledger(Model):
     id = fields.IntField(pk=True)
-    balance = fields.CharField(36)
+    current_stage_num = fields.CharField(36)
+    current_unstaked = fields.CharField(36)
+    past_unstaked = fields.CharField(36)
+    staked = fields.CharField(36)
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
         "models.DAO", related_name="ledger"
     )
@@ -142,6 +145,7 @@ class Proposal(Model):
     key=fields.CharField(128)
     upvotes = fields.CharField(36)
     downvotes = fields.CharField(36)
+    start_level = fields.IntField()
     start_date = fields.DatetimeField()
     metadata = fields.CharField(10000)
     proposer: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
@@ -176,6 +180,7 @@ class Vote(Model):
 class ProposalStatusUpdates(Model):
     id = fields.IntField(pk=True)
     timestamp = fields.DatetimeField()
+    level = fields.IntField()
     status: fields.ForeignKeyRelation[ProposalStatus] = fields.ForeignKeyField(
         "models.ProposalStatus", related_name="status_updates"
     )
