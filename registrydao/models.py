@@ -180,6 +180,7 @@ class Vote(Model):
 class ProposalStatusUpdates(Model):
     id = fields.IntField(pk=True)
     timestamp = fields.DatetimeField()
+    level = fields.IntField()
     status: fields.ForeignKeyRelation[ProposalStatus] = fields.ForeignKeyField(
         "models.ProposalStatus", related_name="status_updates"
     )

@@ -21,5 +21,7 @@ async def on_drop_proposal(
 
     status = await models.ProposalStatus.get(description='dropped')
     proposal = await models.Proposal.get(key=drop_proposal.data.parameter_json)
+
+    print(drop_proposal.data)
     
-    await models.ProposalStatusUpdates.get_or_create(status=status, proposal=proposal, timestamp=drop_proposal.data.timestamp)
+    await models.ProposalStatusUpdates.get_or_create(status=status, proposal=proposal, timestamp=drop_proposal.data.timestamp, level=drop_proposal.data.level)

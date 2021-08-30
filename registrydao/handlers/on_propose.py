@@ -17,6 +17,8 @@ async def on_propose(
 ) -> None:
     dao_address = propose.data.target_address
     proposal_diff = propose.data.diffs[0]['content']
+
+    print(propose.data)
     
     await update_ledger(dao_address, propose.data.diffs)
 
@@ -42,4 +44,4 @@ async def on_propose(
         }
     )
 
-    await models.ProposalStatusUpdates.get_or_create(status=created_status, proposal=proposal[0], timestamp=propose.data.timestamp)
+    await models.ProposalStatusUpdates.get_or_create(status=created_status, proposal=proposal[0], timestamp=propose.data.timestamp, level=propose.data.level)
