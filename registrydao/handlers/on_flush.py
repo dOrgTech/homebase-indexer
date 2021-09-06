@@ -26,14 +26,18 @@ async def on_flush(
 
     created_status = await models.ProposalStatus.get(description='created')
     executed_status = await models.ProposalStatus.get(description='executed')
+    rejected_and_flushed_status = await models.ProposalStatus.get(description='rejected_and_flushed')
     dropped_status = await models.ProposalStatus.get(description='dropped')
     created_proposals = await models.Proposal.filter(dao=dao, status_updates__status=created_status)
 
     for i in range(len(created_proposals)):
         if created_proposals[i].key not in non_flushed_or_executed_keys:
             is_passed = int(created_proposals[i].upvotes) >= int(created_proposals[i].quorum_threshold)
+            is_rejected = int(created_proposals[i].downvotes) >= int(created_proposals[i].quorum_threshold)
             is_dropped = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=dropped_status)
             is_executed = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=executed_status)
             
-            if is_passed and is_dropped != True and is_executed != True:
+            if is_passed and not is_dropped and not is_executed:
                 await models.ProposalStatusUpdates.get_or_create(status=executed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp, level=flush.data.level)
+            elif is_rejected and not is_dropped and not is_executed:
+                await models.ProposalStatusUpdates.get_or_create(status=rejected_and_flushed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp, level=flush.data.level)
