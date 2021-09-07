@@ -4,7 +4,8 @@ on:
     branches:
       - master
 jobs:
-  build:
+  heroku_deployment:
+    name: Heroku deployment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,3 +23,19 @@ jobs:
           PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
           PG_DB: ${{ secrets.PG_DB }}
           PG_SCHEMA: ${{ secrets.PG_SCHEMA }}
+  hasura_migration:
+    needs: heroku_deployment
+    name: Hasura migration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Apply hasura migrations
+        uses: tibotiber/hasura-action@master
+        with:
+          args: migrate apply
+        env:
+          HASURA_ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
+          HASURA_ADMIN_SECRET: ${{ secrets.HASURA_ADMIN_SECRET }}
+          HASURA_WORKDIR: backend/hasura
+          HASURA_ENGINE_VERSION: v2.0.8
