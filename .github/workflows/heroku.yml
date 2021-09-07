@@ -16,24 +16,3 @@ jobs:
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true
           docker_heroku_process_type: worker
-        env:
-          PG_HOST: ${{ secrets.PG_HOST }}
-          PG_PORT: ${{ secrets.PG_PORT }}
-          PG_USER: ${{ secrets.PG_USER }}
-          PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          PG_DB: ${{ secrets.PG_DB }}
-          PG_SCHEMA: ${{ secrets.PG_SCHEMA }}
-  hasura_migration:
-    needs: heroku_deployment
-    name: Hasura migration
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Apply hasura migrations
-        uses: tibotiber/hasura-action@master
-        with:
-          args: migrate apply
-        env:
-          HASURA_ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
-          HASURA_ADMIN_SECRET: ${{ secrets.HASURA_ADMIN_SECRET }}
