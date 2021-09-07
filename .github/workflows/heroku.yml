@@ -37,5 +37,3 @@ jobs:
         env:
           HASURA_ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
           HASURA_ADMIN_SECRET: ${{ secrets.HASURA_ADMIN_SECRET }}
-          HASURA_WORKDIR: backend/hasura
-          HASURA_ENGINE_VERSION: v2.0.8
