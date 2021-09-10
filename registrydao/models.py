@@ -57,6 +57,7 @@ class DAO(Model):
     start_level = fields.IntField()
     name = fields.CharField(255)
     description = fields.CharField(2500)
+    discourse = fields.CharField(2500)
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAOType", related_name="daos"
     )

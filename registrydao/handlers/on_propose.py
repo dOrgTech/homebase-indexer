@@ -17,8 +17,6 @@ async def on_propose(
 ) -> None:
     dao_address = propose.data.target_address
     proposal_diff = propose.data.diffs[0]['content']
-
-    print(propose.data)
     
     await update_ledger(dao_address, propose.data.diffs)
 

@@ -18,8 +18,6 @@ async def on_vote(
     vote_diff = vote.data.diffs[0]['content']
     dao_address = vote.data.target_address
 
-    print(vote_diff)
-
     dao = await models.DAO.get(address=dao_address)
     proposal = await models.Proposal.get(key=vote_diff['key'], dao=dao)
     voter = await models.Holder.get_or_create(address=vote_diff['value']['voters'][0]['key']['address'])

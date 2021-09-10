@@ -41,6 +41,11 @@ async def on_origination(
     fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
     dao_type = fetched_metadata['extras']['template']
 
+    if 'discourse' in fetched_metadata['extras'] and fetched_metadata['extras']['discourse']:
+        discourse = fetched_metadata['extras']['discourse'].strip("/")
+    else:
+        discourse = "forum.tezosagora.org"
+
     type = await models.DAOType.get_or_create(name=dao_type)
 
     if 'level' in fetched_token:
@@ -89,7 +94,8 @@ async def on_origination(
         name=fetched_metadata['name'],
         description=fetched_metadata['description'],
         governance_token=token[0],
-        type=type[0]
+        type=type[0],
+        discourse=discourse
     )
 
     extra_map_number = registry_origination.data.storage['extra']
