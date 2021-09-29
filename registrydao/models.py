@@ -23,7 +23,7 @@ class Token(Model):
     decimals = fields.IntField()
     is_transferable = fields.BooleanField()
     should_prefer_symbol = fields.BooleanField()
-    supply = fields.CharField(36)
+    supply = fields.DecimalField(54, 18)
     daos: fields.ReverseRelation["DAO"]
 
     class Meta:
@@ -44,16 +44,16 @@ class DAO(Model):
     proposals: fields.ReverseRelation["Proposal"]
     max_proposals = fields.CharField(255)
     max_quorum_change = fields.CharField(255)
-    max_quorum_threshold = fields.CharField(255)
+    max_quorum_threshold = fields.DecimalField(54, 18)
     max_voters = fields.CharField(255)
-    min_quorum_threshold = fields.CharField(255)
+    min_quorum_threshold = fields.DecimalField(54, 18)
     period = fields.CharField(255)
     proposal_expired_level = fields.IntField()
     proposal_flush_level = fields.IntField()
     quorum_change = fields.CharField(255)
     last_updated_cycle = fields.CharField(255)
-    quorum_threshold = fields.CharField(255)
-    staked = fields.CharField(255)
+    quorum_threshold = fields.DecimalField(54, 18)
+    staked = fields.DecimalField(54, 18)
     start_level = fields.IntField()
     name = fields.CharField(255)
     description = fields.CharField(2500)
@@ -114,9 +114,9 @@ class Holder(Model):
 class Ledger(Model):
     id = fields.IntField(pk=True)
     current_stage_num = fields.CharField(36)
-    current_unstaked = fields.CharField(36)
-    past_unstaked = fields.CharField(36)
-    staked = fields.CharField(36)
+    current_unstaked = fields.DecimalField(54, 18)
+    past_unstaked = fields.DecimalField(54, 18)
+    staked = fields.DecimalField(54, 18)
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
         "models.DAO", related_name="ledger"
     )
@@ -144,8 +144,8 @@ class Proposal(Model):
     )
     hash=fields.CharField(128)
     key=fields.CharField(128)
-    upvotes = fields.CharField(36)
-    downvotes = fields.CharField(36)
+    upvotes = fields.DecimalField(54, 18)
+    downvotes = fields.DecimalField(54, 18)
     start_level = fields.IntField()
     start_date = fields.DatetimeField()
     metadata = fields.CharField(10000)
@@ -154,7 +154,7 @@ class Proposal(Model):
     )
     voting_stage_num=fields.CharField(50)
     proposer_frozen_token=fields.CharField(50)
-    quorum_threshold=fields.CharField(50)
+    quorum_threshold=fields.DecimalField(54, 18)
     votes: fields.ReverseRelation["Vote"]
     status_updates: fields.ReverseRelation["ProposalStatusUpdates"]
 
@@ -169,7 +169,7 @@ class Vote(Model):
     proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
         "models.Proposal", related_name="votes"
     )
-    amount = fields.CharField(36)
+    amount = fields.DecimalField(54, 18)
     support = fields.BooleanField()
     voter: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder", related_name="votes"
