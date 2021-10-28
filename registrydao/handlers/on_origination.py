@@ -38,6 +38,9 @@ async def on_origination(
     fetched_token = (await fetch(
         f'{BETTER_CALL_DEV_API}/tokens/{network}/metadata?contract={token_address}&token_id={token_id}'))[0]
 
+    if('symbol' not in fetched_token):
+        return
+
     fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
     dao_type = fetched_metadata['extras']['template']
 
