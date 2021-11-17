@@ -17,11 +17,17 @@ contracts:
   registry_mainnet:
     address: KT1JytEHBVBg27n9w85tNhSWUpbTvETD6rx6
     typename: registry
+  registry_granadanet:
+    address: KT1VHWrYVAhVMFMrXc7WedaNVZyb4juW4qBz
+    typename: registry
 
 datasources:
   tzkt_florencenet:
     kind: tzkt
     url: https://api.florencenet.tzkt.io
+  tzkt_granadanet:
+    kind: tzkt
+    url: https://api.granadanet.tzkt.io
   tzkt_mainnet:
     kind: tzkt
     url: https://api.mainnet.tzkt.io
@@ -118,6 +124,53 @@ indexes:
     values:
       contract: registry_florence
       datasource: tzkt_florencenet
+  
+  factory_granadanet:
+    kind: operation
+    datasource: tzkt_granadanet
+    types:
+      - origination
+    handlers:
+      - callback: on_factory_origination
+        pattern:
+          - type: origination
+            similar_to: registry_granadanet
+      - callback: on_propose
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: propose
+      - callback: on_vote
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: vote
+      - callback: on_drop_proposal
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: drop_proposal
+      - callback: on_flush
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: flush
+      - callback: on_freeze
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: freeze
+      - callback: on_unfreeze
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: unfreeze
+    stateless: True
+  dao_granadanet:
+    template: registry_dao
+    values:
+      contract: registry_granadanet
+      datasource: tzkt_granadanet
 
   factory_mainnet:
     kind: operation

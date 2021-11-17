@@ -6,6 +6,9 @@ def extract_network_from_ctx(ctx: HandlerContext) -> str:
 
     if 'florencenet' in datasource_url:
         return 'florencenet'
+
+    if 'granadanet' in datasource_url:
+        return 'granadanet'
     
     if 'mainnet' in datasource_url:
         return 'mainnet'
