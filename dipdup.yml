@@ -51,6 +51,11 @@ templates:
           - type: transaction
             destination: <contract>
             entrypoint: propose
+      - callback: on_call_custom
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: callCustom
       - callback: on_flush
         pattern:
           - type: transaction
@@ -93,6 +98,11 @@ indexes:
           - type: transaction
             destination: registry_florence
             entrypoint: propose
+      - callback: on_call_custom
+        pattern:
+          - type: transaction
+            destination: registry_florence
+            entrypoint: callCustom
       - callback: on_vote
         pattern:
           - type: transaction
@@ -140,6 +150,11 @@ indexes:
           - type: transaction
             destination: registry_granadanet
             entrypoint: propose
+      - callback: on_call_custom
+        pattern:
+          - type: transaction
+            destination: registry_granadanet
+            entrypoint: callCustom
       - callback: on_vote
         pattern:
           - type: transaction
@@ -187,6 +202,11 @@ indexes:
           - type: transaction
             destination: registry_mainnet
             entrypoint: propose
+      - callback: on_call_custom
+        pattern:
+          - type: transaction
+            destination: registry_mainnet
+            entrypoint: callCustom
       - callback: on_vote
         pattern:
           - type: transaction

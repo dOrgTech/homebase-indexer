@@ -25,6 +25,7 @@ class Token(Model):
     should_prefer_symbol = fields.BooleanField()
     supply = fields.DecimalField(54, 18)
     daos: fields.ReverseRelation["DAO"]
+    transfers: fields.ReverseRelation["Transfer"]
 
     class Meta:
         table = 'tokens'
@@ -41,6 +42,7 @@ class DAO(Model):
     admin = fields.CharField(36)
     guardian = fields.CharField(36)
     ledger: fields.ReverseRelation["Ledger"]
+    transfers: fields.ReverseRelation["Transfer"]
     proposals: fields.ReverseRelation["Proposal"]
     max_proposals = fields.CharField(255)
     max_quorum_change = fields.CharField(255)
@@ -177,6 +179,18 @@ class Vote(Model):
 
     class Meta:
         table = 'votes'
+
+class Transfer(Model):
+    id = fields.IntField(pk=True)
+    timestamp = fields.DatetimeField()
+    dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
+        "models.DAO", related_name="transfers"
+    )
+    amount = fields.CharField(128)
+    integer_amount = fields.BigIntField()
+    decimal_amount = fields.DecimalField(54, 18)
+    from_address = fields.CharField(36)
+    hash = fields.CharField(128)
 
 class ProposalStatusUpdates(Model):
     id = fields.IntField(pk=True)
