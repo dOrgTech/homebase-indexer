@@ -4,11 +4,8 @@ from dipdup.context import HandlerContext
 def extract_network_from_ctx(ctx: HandlerContext) -> str:
     datasource_url = ctx.datasource._http._url
 
-    if 'florencenet' in datasource_url:
-        return 'florencenet'
-
-    if 'granadanet' in datasource_url:
-        return 'granadanet'
+    if 'hangzhou2net' in datasource_url:
+        return 'hangzhounet'
     
     if 'mainnet' in datasource_url:
         return 'mainnet'

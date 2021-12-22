@@ -11,23 +11,17 @@ database:
   schema_name: ${PG_SCHEMA:-changeme}
 
 contracts:
-  registry_florence:
-    address: KT1HDk4DxrxjQntn12sum5xWCWxEPdjnhd5X
-    typename: registry
   registry_mainnet:
     address: KT1JytEHBVBg27n9w85tNhSWUpbTvETD6rx6
     typename: registry
-  registry_granadanet:
-    address: KT1VHWrYVAhVMFMrXc7WedaNVZyb4juW4qBz
+  registry_hangzhounet:
+    address: KT1Pz2ZUhvbALAPNmJMG5ZX1ma3Rpnor8brg
     typename: registry
 
 datasources:
-  tzkt_florencenet:
+  tzkt_hangzhounet:
     kind: tzkt
-    url: https://api.florencenet.tzkt.io
-  tzkt_granadanet:
-    kind: tzkt
-    url: https://api.granadanet.tzkt.io
+    url: https://api.hangzhou2net.tzkt.io
   tzkt_mainnet:
     kind: tzkt
     url: https://api.mainnet.tzkt.io
@@ -83,109 +77,57 @@ templates:
             entrypoint: unfreeze
 
 indexes:
-  factory_florence:
+  factory_hangzhounet:
     kind: operation
-    datasource: tzkt_florencenet
+    datasource: tzkt_hangzhounet
     types:
       - origination
     handlers:
       - callback: on_factory_origination
         pattern:
           - type: origination
-            similar_to: registry_florence
+            similar_to: registry_hangzhounet
       - callback: on_propose
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: propose
       - callback: on_call_custom
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: callCustom
       - callback: on_vote
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: vote
       - callback: on_drop_proposal
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: drop_proposal
       - callback: on_flush
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: flush
       - callback: on_freeze
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: freeze
       - callback: on_unfreeze
         pattern:
           - type: transaction
-            destination: registry_florence
+            destination: registry_hangzhounet
             entrypoint: unfreeze
     stateless: True
-  dao_florence:
+  dao_hangzhounet:
     template: registry_dao
     values:
-      contract: registry_florence
-      datasource: tzkt_florencenet
-  
-  factory_granadanet:
-    kind: operation
-    datasource: tzkt_granadanet
-    types:
-      - origination
-    handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_granadanet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: propose
-      - callback: on_call_custom
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: callCustom
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: drop_proposal
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_granadanet
-            entrypoint: unfreeze
-    stateless: True
-  dao_granadanet:
-    template: registry_dao
-    values:
-      contract: registry_granadanet
-      datasource: tzkt_granadanet
+      contract: registry_hangzhounet
+      datasource: tzkt_hangzhounet
 
   factory_mainnet:
     kind: operation
