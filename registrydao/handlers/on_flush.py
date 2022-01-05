@@ -32,8 +32,8 @@ async def on_flush(
 
     for i in range(len(created_proposals)):
         if created_proposals[i].key not in non_flushed_or_executed_keys:
-            is_passed = int(created_proposals[i].upvotes) >= int(created_proposals[i].quorum_threshold)
             is_rejected = int(created_proposals[i].downvotes) >= int(created_proposals[i].quorum_threshold)
+            is_passed = (int(created_proposals[i].upvotes) >= int(created_proposals[i].quorum_threshold)) and not is_rejected
             is_dropped = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=dropped_status)
             is_executed = await models.ProposalStatusUpdates.exists(proposal=created_proposals[i], status=executed_status)
             
