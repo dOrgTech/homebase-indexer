@@ -35,8 +35,13 @@ async def on_origination(
     token_id = registry_origination.data.storage['governance_token']['token_id']
     dao_address = registry_origination.data.originated_contract_address
 
-    fetched_token = (await fetch(
-        f'{BETTER_CALL_DEV_API}/tokens/{BCD_NETWORK_MAP[network]}/metadata?contract={token_address}&token_id={token_id}'))[0]
+    fetched_token_resp = (await fetch(
+        f'{BETTER_CALL_DEV_API}/tokens/{BCD_NETWORK_MAP[network]}/metadata?contract={token_address}&token_id={token_id}'))
+
+    if not fetched_token_resp:
+        return
+
+    fetched_token = fetched_token_resp[0]
 
     if('symbol' not in fetched_token):
         return
