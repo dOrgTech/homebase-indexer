@@ -20,24 +20,21 @@ async def on_vote(
 
     dao = await models.DAO.get(address=dao_address)
     proposal = await models.Proposal.get(key=vote_diff['key'], dao=dao)
-    voter = await models.Holder.get_or_create(address=vote_diff['value']['voters'][0]['key']['address'])
-    support = vote_diff['value']['voters'][0]['key']['bool']
-    amount = vote_diff['value']['voters'][0]['value']
 
-    await update_ledger(vote.data.target_address, vote.data.diffs)
+    for voter_diff in vote_diff['value']['voters']:
+        voter = await models.Holder.get_or_create(address=voter_diff['key']['address'])
+        support = voter_diff['key']['bool']
+        amount = voter_diff['value']
 
-    await models.Vote.get_or_create(
-        key=vote_diff['key'],
-        hash=vote_diff['hash'],
-        proposal=proposal,
-        amount=amount,
-        support=support,
-        voter=voter[0]
-    )
+        await update_ledger(vote.data.target_address, vote.data.diffs)
 
-    if support == True:
-        proposal.upvotes = int(proposal.upvotes) + int(amount)
-    else:
-        proposal.downvotes = int(proposal.downvotes) + int(amount)
-
-    await proposal.save()
+        await models.Vote.update_or_create(
+            key=vote_diff['key'],
+            hash=vote_diff['hash'],
+            proposal=proposal,
+            support=support,
+            voter=voter[0],
+            defaults={
+                'amount':amount
+            }
+        )

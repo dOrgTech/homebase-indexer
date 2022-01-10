@@ -1,7 +1,7 @@
 from asyncio import sleep
 from datetime import datetime
 from registrydao.utils.ctx import extract_network_from_ctx
-from registrydao.constants import BETTER_CALL_DEV_API, BCD_NETWORK_MAP
+from registrydao.constants import BETTER_CALL_DEV_API, BCD_NETWORK_MAP, WHITE_BETTER_CALL_DEV_API
 from registrydao.utils.http import fetch
 
 from dipdup.context import HandlerContext
@@ -37,6 +37,11 @@ async def on_origination(
 
     fetched_token_resp = (await fetch(
         f'{BETTER_CALL_DEV_API}/tokens/{BCD_NETWORK_MAP[network]}/metadata?contract={token_address}&token_id={token_id}'))
+
+    # Try with backup API. TODO: change this later
+    if not fetched_token_resp:
+        fetched_token_resp = (await fetch(
+        f'{WHITE_BETTER_CALL_DEV_API}/tokens/{BCD_NETWORK_MAP[network]}/metadata?contract={token_address}&token_id={token_id}'))
 
     if not fetched_token_resp:
         return
