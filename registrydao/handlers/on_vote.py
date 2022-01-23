@@ -38,3 +38,10 @@ async def on_vote(
                 'amount':amount
             }
         )
+
+        if support:
+            proposal.upvotes = float(proposal.upvotes) + float(amount)
+        else:
+            proposal.downvotes = float(proposal.downvotes) + float(amount)
+        
+        await proposal.save()

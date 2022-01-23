@@ -17,7 +17,7 @@ async def on_flush(
     flush: Transaction[FlushParameter, RegistryStorage],
 ) -> None:
 
-    non_flushed_or_executed_keys = map(extract_key, flush.data.storage['proposal_key_list_sort_by_level'])
+    non_flushed_or_executed_keys = list(map(extract_key, flush.data.storage['proposal_key_list_sort_by_level']))
     dao_address = flush.data.target_address
     dao = await models.DAO.get(address=dao_address)
     
