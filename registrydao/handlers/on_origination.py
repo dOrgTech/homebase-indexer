@@ -110,30 +110,31 @@ async def on_origination(
         type=type[0],
         discourse=discourse
     )
+    
+    fetched_extra = registry_origination.data.storage['extra']
 
-    extra_map_number = registry_origination.data.storage['extra']
-    fetched_extra = await fetch(f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/bigmaps/{extra_map_number}/keys')
+    print(dao)
 
     if dao_type == 'registry':
         await models.RegistryExtra.get_or_create(
-            registry=find_in_json('key', 'registry', fetched_extra)['value'],
-            registry_affected=find_in_json('key', 'registry_affected', fetched_extra)['value'],
-            frozen_extra_value=find_in_json('key', 'frozen_extra_value', fetched_extra)['value'],
-            frozen_scale_value=find_in_json('key', 'frozen_scale_value', fetched_extra)['value'],
-            slash_division_value=find_in_json('key', 'slash_division_value', fetched_extra)['value'],
-            min_xtz_amount=find_in_json('key', 'min_xtz_amount', fetched_extra)['value'],
-            max_xtz_amount=find_in_json('key', 'max_xtz_amount', fetched_extra)['value'],
-            slash_scale_value=find_in_json('key', 'slash_scale_value', fetched_extra)['value'],
+            registry=fetched_extra['registry'],
+            registry_affected=fetched_extra['registry_affected'],
+            frozen_extra_value=fetched_extra['frozen_extra_value'],
+            frozen_scale_value=fetched_extra['frozen_scale_value'],
+            slash_division_value=fetched_extra['slash_division_value'],
+            min_xtz_amount=fetched_extra['min_xtz_amount'],
+            max_xtz_amount=fetched_extra['max_xtz_amount'],
+            slash_scale_value=fetched_extra['slash_scale_value'],
             dao=dao[0]
         )
     else:
         await models.TreasuryExtra.get_or_create(
-            frozen_extra_value=find_in_json('key', 'frozen_extra_value', fetched_extra)['value'],
-            frozen_scale_value=find_in_json('key', 'frozen_scale_value', fetched_extra)['value'],
-            slash_division_value=find_in_json('key', 'slash_division_value', fetched_extra)['value'],
-            min_xtz_amount=find_in_json('key', 'min_xtz_amount', fetched_extra)['value'],
-            max_xtz_amount=find_in_json('key', 'max_xtz_amount', fetched_extra)['value'],
-            slash_scale_value=find_in_json('key', 'slash_scale_value', fetched_extra)['value'],
+            frozen_extra_value=fetched_extra['frozen_extra_value'],
+            frozen_scale_value=fetched_extra['frozen_scale_value'],
+            slash_division_value=fetched_extra['slash_division_value'],
+            min_xtz_amount=fetched_extra['min_xtz_amount'],
+            max_xtz_amount=fetched_extra['max_xtz_amount'],
+            slash_scale_value=fetched_extra['slash_scale_value'],
             dao=dao[0]
         )
 

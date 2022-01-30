@@ -1,6 +1,6 @@
 from registrydao.utils.ctx import extract_network_from_ctx
 from dipdup.models import OperationData, Transaction, Origination, BigMapDiff, BigMapData, BigMapAction
-from dipdup.context import HandlerContext, RollbackHandlerContext
+from dipdup.context import HandlerContext
 from typing import cast
 
 
@@ -17,12 +17,12 @@ async def on_factory_origination(
     network = extract_network_from_ctx(ctx)
     
     if index_name not in ctx.config.indexes:
-        ctx.add_contract(
+        await ctx.add_contract(
             name=originated_contract,
             address=originated_contract,
             typename='registry',
         )
-        ctx.add_index(
+        await ctx.add_index(
             name=index_name,
             template='registry_dao',
             values=dict(contract=originated_contract, datasource=f'tzkt_{network}'),

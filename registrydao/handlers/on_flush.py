@@ -24,6 +24,9 @@ async def on_flush(
     await update_ledger(dao_address, flush.data.diffs)
     await update_extra(dao_address, flush.data.diffs)
 
+    dao.guardian = flush.data.storage["guardian"]
+    await dao.save()
+
     created_status = await models.ProposalStatus.get(description='created')
     executed_status = await models.ProposalStatus.get(description='executed')
     rejected_and_flushed_status = await models.ProposalStatus.get(description='rejected_and_flushed')

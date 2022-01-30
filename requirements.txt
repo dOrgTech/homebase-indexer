@@ -16,7 +16,7 @@ chardet==4.0.0
 charset-normalizer==2.0.3
 click==8.0.1
 datamodel-code-generator==0.11.8
-dipdup==2.0.2
+dipdup==4.1.0
 fcache==0.4.7
 genson==1.2.2
 idna==3.2
