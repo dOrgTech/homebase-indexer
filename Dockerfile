@@ -1,2 +1,2 @@
-FROM dipdup/dipdup:2.0.2
+FROM dipdup/dipdup:4.1.0
 COPY . /home/dipdup
