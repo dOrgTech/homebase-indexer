@@ -16,8 +16,6 @@ jobs:
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true
           docker_heroku_process_type: worker
-
-name: V2-Deploy
 on:
   push:
     branches:
