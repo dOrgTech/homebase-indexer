@@ -12,10 +12,10 @@ database:
 
 contracts:
   registry_mainnet:
-    address: KT1JytEHBVBg27n9w85tNhSWUpbTvETD6rx6
+    address: KT1DVkKk8Nm2kVBiQrNhn8hXab2DuTb17oib
     typename: registry
   registry_hangzhounet:
-    address: KT1Pz2ZUhvbALAPNmJMG5ZX1ma3Rpnor8brg
+    address: KT1APQ6omMYF41QwXyvPaK8Wj3V3gRgBA9Zr
     typename: registry
 
 datasources:

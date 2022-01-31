@@ -50,22 +50,6 @@ class ProposalKeyListSortByLevelItem(BaseModel):
     nat: str
 
 
-class Key1(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    address: str
-    bool: bool
-
-
-class Voter(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    key: Key1
-    value: str
-
-
 class Proposals(BaseModel):
     class Config:
         extra = Extra.forbid
@@ -77,7 +61,6 @@ class Proposals(BaseModel):
     quorum_threshold: str
     start_level: str
     upvotes: str
-    voters: List[Voter]
     voting_stage_num: str
 
 
@@ -88,6 +71,22 @@ class QuorumThresholdAtCycle(BaseModel):
     last_updated_cycle: str
     quorum_threshold: str
     staked: str
+
+
+class Key1(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    address: str
+    bytes: str
+
+
+class StakedVote(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    key: Key1
+    value: str
 
 
 class RegistryStorage(BaseModel):
@@ -109,7 +108,6 @@ class RegistryStorage(BaseModel):
     max_proposals: str
     max_quorum_change: str
     max_quorum_threshold: str
-    max_voters: str
     metadata: Dict[str, str]
     min_quorum_threshold: str
     pending_owner: str
@@ -123,4 +121,5 @@ class RegistryStorage(BaseModel):
     quorum_change: str
     quorum_threshold_at_cycle: QuorumThresholdAtCycle
     rejected_proposal_slash_value: str
+    staked_votes: List[StakedVote]
     start_level: str

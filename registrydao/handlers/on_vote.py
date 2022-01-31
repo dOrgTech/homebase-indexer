@@ -15,35 +15,31 @@ async def on_vote(
     vote: Transaction[VoteParameter, RegistryStorage],
 ) -> None:
 
-    vote_diff = vote.data.diffs[0]['content']
+    vote_diff = vote.parameter.__root__[0].argument
     dao_address = vote.data.target_address
+    proposal_key = vote_diff.proposal_key
 
     dao = await models.DAO.get(address=dao_address)
-    proposal = await models.Proposal.get(key=vote_diff['key'], dao=dao)
-    proposal.upvotes = 0
-    proposal.downvotes = 0
+    proposal = await models.Proposal.get(key=proposal_key, dao=dao)
 
-    for voter_diff in vote_diff['value']['voters']:
-        voter = await models.Holder.get_or_create(address=voter_diff['key']['address'])
-        support = voter_diff['key']['bool']
-        amount = voter_diff['value']
+    voter = await models.Holder.get_or_create(address=vote_diff.from_)
+    support = vote_diff.vote_type
+    amount = vote_diff.vote_amount
 
-        await update_ledger(vote.data.target_address, vote.data.diffs)
+    await update_ledger(vote.data.target_address, vote.data.diffs)
 
-        await models.Vote.update_or_create(
-            key=vote_diff['key'],
-            hash=vote_diff['hash'],
-            proposal=proposal,
-            support=support,
-            voter=voter[0],
-            defaults={
-                'amount':amount
-            }
-        )
+    await models.Vote.update_or_create(
+        proposal=proposal,
+        support=support,
+        voter=voter[0],
+        defaults={
+            'amount':amount
+        }
+    )
 
-        if support:
-            proposal.upvotes = float(proposal.upvotes) + float(amount)
-        else:
-            proposal.downvotes = float(proposal.downvotes) + float(amount)
-        
-        await proposal.save()
+    if support:
+        proposal.upvotes = float(proposal.upvotes) + float(amount)
+    else:
+        proposal.downvotes = float(proposal.downvotes) + float(amount)
+    
+    await proposal.save()

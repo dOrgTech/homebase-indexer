@@ -47,7 +47,6 @@ class DAO(Model):
     max_proposals = fields.CharField(255)
     max_quorum_change = fields.CharField(255)
     max_quorum_threshold = fields.DecimalField(54, 18)
-    max_voters = fields.CharField(255)
     min_quorum_threshold = fields.DecimalField(54, 18)
     period = fields.CharField(255)
     proposal_expired_level = fields.IntField()
@@ -166,8 +165,6 @@ class Proposal(Model):
 
 class Vote(Model):
     id = fields.IntField(pk=True)
-    hash=fields.CharField(128)
-    key=fields.CharField(128)
     proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
         "models.Proposal", related_name="votes"
     )

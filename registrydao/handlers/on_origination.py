@@ -93,7 +93,6 @@ async def on_origination(
         max_proposals=registry_origination.data.storage['max_proposals'],
         max_quorum_change=registry_origination.data.storage['max_quorum_change'],
         max_quorum_threshold=registry_origination.data.storage['max_quorum_threshold'],
-        max_voters=registry_origination.data.storage['max_voters'],
         min_quorum_threshold=registry_origination.data.storage['min_quorum_threshold'],
         period=registry_origination.data.storage['period'],
         proposal_expired_level=registry_origination.data.storage['proposal_expired_level'],
