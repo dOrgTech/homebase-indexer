@@ -44,3 +44,5 @@ async def on_flush(
                 await models.ProposalStatusUpdates.get_or_create(status=executed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp, level=flush.data.level)
             elif is_rejected and not is_dropped and not is_executed:
                 await models.ProposalStatusUpdates.get_or_create(status=rejected_and_flushed_status, proposal=created_proposals[i], timestamp=flush.data.timestamp, level=flush.data.level)
+            elif not is_dropped and not is_executed:
+                await models.ProposalStatusUpdates.get_or_create(status=dropped_status, proposal=created_proposals[i], timestamp=flush.data.timestamp, level=flush.data.level)
