@@ -19,7 +19,7 @@ class Token(Model):
     timestamp = fields.DatetimeField()
     token_id = fields.IntField()
     symbol = fields.CharField(25)
-    name = fields.CharField(25)
+    name = fields.CharField(50)
     decimals = fields.IntField()
     is_transferable = fields.BooleanField()
     should_prefer_symbol = fields.BooleanField()
