@@ -73,6 +73,11 @@ templates:
           - type: transaction
             destination: <contract>
             entrypoint: drop_proposal
+      - callback: on_unstake_vote
+        pattern:
+          - type: transaction
+            destination: <contract>
+            entrypoint: unstake_vote
       - callback: on_freeze
         pattern:
           - type: transaction
@@ -115,6 +120,11 @@ indexes:
           - type: transaction
             destination: registry_hangzhounet
             entrypoint: drop_proposal
+      - callback: on_unstake_vote
+        pattern:
+          - type: transaction
+            destination: registry_hangzhounet
+            entrypoint: unstake_vote
       - callback: on_flush
         pattern:
           - type: transaction
@@ -166,6 +176,11 @@ indexes:
           - type: transaction
             destination: registry_mainnet
             entrypoint: drop_proposal
+      - callback: on_unstake_vote
+        pattern:
+          - type: transaction
+            destination: registry_mainnet
+            entrypoint: unstake_vote
       - callback: on_flush
         pattern:
           - type: transaction
