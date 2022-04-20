@@ -10,4 +10,7 @@ def extract_network_from_ctx(ctx: HandlerContext) -> str:
     if 'mainnet' in datasource_url:
         return 'mainnet'
 
+    if 'ithacanet' in datasource_url:
+        return 'ithacanet'
+
     raise RuntimeError('Could not extract network from handler context')
