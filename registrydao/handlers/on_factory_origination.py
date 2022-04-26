@@ -25,5 +25,5 @@ async def on_factory_origination(
         await ctx.add_index(
             name=index_name,
             template='registry_dao',
-            values=dict(contract=originated_contract, datasource=f'tzkt_{network}'),
+            values={'contract': originated_contract, 'datasource': f'tzkt_{network}'},
         )
