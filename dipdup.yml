@@ -10,6 +10,14 @@ database:
   database: ${PG_DB:- }
   schema_name: ${PG_SCHEMA:-changeme}
 
+advanced:
+  reindex:
+    manual: wipe
+    migration: wipe
+    rollback: wipe
+    config_modified: wipe
+    schema_modified: wipe
+
 contracts:
   registry_mainnet:
     address: KT1JytEHBVBg27n9w85tNhSWUpbTvETD6rx6
