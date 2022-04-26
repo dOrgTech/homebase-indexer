@@ -16,7 +16,7 @@ chardet==4.0.0
 charset-normalizer==2.0.12
 click==8.1.2
 datamodel-code-generator==0.11.20
-dipdup==4.2.7
+dipdup==4.1.0
 dnspython==2.2.1
 email-validator==1.2.0
 fcache==0.4.7
