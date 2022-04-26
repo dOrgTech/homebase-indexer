@@ -1,1 +1,1 @@
-web: python -m dipdup run
+worker: python -m dipdup run
