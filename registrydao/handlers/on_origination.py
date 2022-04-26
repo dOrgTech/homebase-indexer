@@ -1,7 +1,7 @@
 from asyncio import sleep
 from datetime import datetime
 from registrydao.utils.ctx import extract_network_from_ctx
-from registrydao.constants import BETTER_CALL_DEV_API, BCD_NETWORK_MAP, WHITE_BETTER_CALL_DEV_API
+from registrydao.constants import BETTER_CALL_DEV_API, BCD_NETWORK_MAP
 from registrydao.utils.http import fetch
 
 from dipdup.context import HandlerContext
@@ -36,19 +36,15 @@ async def on_origination(
     dao_address = registry_origination.data.originated_contract_address
 
     fetched_token_resp = (await fetch(
-        f'{BETTER_CALL_DEV_API}/tokens/{BCD_NETWORK_MAP[network]}/metadata?contract={token_address}&token_id={token_id}'))
-
-    # Try with backup API. TODO: change this later
-    if not fetched_token_resp:
-        fetched_token_resp = (await fetch(
-        f'{WHITE_BETTER_CALL_DEV_API}/tokens/{BCD_NETWORK_MAP[network]}/metadata?contract={token_address}&token_id={token_id}'))
+        f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/tokens?contract={token_address}&tokenId={token_id}'))
 
     if not fetched_token_resp:
         return
 
     fetched_token = fetched_token_resp[0]
+    fetched_token_metadata = fetched_token['metadata']
 
-    if('symbol' not in fetched_token):
+    if('symbol' not in fetched_token_metadata):
         return
 
     fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
@@ -61,28 +57,28 @@ async def on_origination(
 
     type = await models.DAOType.get_or_create(name=dao_type)
 
-    if 'level' in fetched_token:
-        level = fetched_token["level"]
+    if 'firstLevel' in fetched_token:
+        firstLevel = fetched_token["firstLevel"]
     else:
-        level = -1
+        firstLevel = -1
 
-    if 'should_prefer_symbol' in fetched_token:
-        should_prefer_symbol = fetched_token['should_prefer_symbol']
+    if 'shouldPreferSymbol' in fetched_token:
+        shouldPreferSymbol = fetched_token_metadata['shouldPreferSymbol']
     else:
-        should_prefer_symbol = True
+        shouldPreferSymbol = True
 
     token = await models.Token.get_or_create(
-        contract=fetched_token["contract"],
+        contract=token_address,
         network=network,
-        level=level,
-        timestamp=datetime.strptime(fetched_token["timestamp"], '%Y-%m-%dT%H:%M:%SZ'),
-        token_id=fetched_token["token_id"],
-        symbol=fetched_token["symbol"],
-        name=fetched_token["name"],
-        decimals=fetched_token["decimals"],
-        is_transferable=fetched_token["is_transferable"],
-        should_prefer_symbol=should_prefer_symbol,
-        supply=fetched_token["supply"]
+        level=firstLevel,
+        timestamp=datetime.strptime(fetched_token["firstTime"], '%Y-%m-%dT%H:%M:%SZ'),
+        token_id=token_id,
+        symbol=fetched_token_metadata["symbol"],
+        name=fetched_token_metadata["name"],
+        decimals=fetched_token_metadata["decimals"],
+        is_transferable=True,
+        should_prefer_symbol=shouldPreferSymbol,
+        supply=fetched_token["totalSupply"]
     )
 
     dao = await models.DAO.get_or_create(
@@ -100,7 +96,7 @@ async def on_origination(
         proposal_flush_level=registry_origination.data.storage['proposal_flush_level'],
         quorum_change=registry_origination.data.storage['quorum_change'],
         last_updated_cycle=registry_origination.data.storage['quorum_threshold_at_cycle']['last_updated_cycle'],
-        quorum_threshold=round((int(registry_origination.data.storage['quorum_threshold_at_cycle']['quorum_threshold']) / 1000000) * int(fetched_token["supply"])),
+        quorum_threshold=round((int(registry_origination.data.storage['quorum_threshold_at_cycle']['quorum_threshold']) / 1000000) * int(fetched_token["totalSupply"])),
         staked=registry_origination.data.storage['quorum_threshold_at_cycle']['staked'],
         start_level=registry_origination.data.storage['start_level'],
         network=network,
