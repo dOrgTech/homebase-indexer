@@ -1,6 +1,0 @@
-setup:
-  config:
-    env_file: .env
-build:
-  docker:
-    worker: Dockerfile
