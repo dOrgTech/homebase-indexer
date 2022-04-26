@@ -1,4 +1,4 @@
-spec_version: 1.1
+spec_version: 1.2
 package: registrydao
 
 database:
@@ -122,7 +122,6 @@ indexes:
           - type: transaction
             destination: registry_hangzhounet
             entrypoint: unfreeze
-    stateless: True
   dao_hangzhounet:
     template: registry_dao
     values:
@@ -174,7 +173,6 @@ indexes:
           - type: transaction
             destination: registry_mainnet
             entrypoint: unfreeze
-    stateless: True
 
   dao_mainnet:
     template: registry_dao

@@ -1,8 +1,11 @@
-from dipdup.models import OperationData, Transaction, Origination, BigMapDiff, BigMapData, BigMapAction
-from dipdup.context import HandlerContext, RollbackHandlerContext
+
+from dipdup.context import HookContext
 import registrydao.models as models
 
-async def on_configure(ctx: HandlerContext) -> None:
+async def on_reindex(
+    ctx: HookContext,
+) -> None:
+    await ctx.execute_sql('on_reindex')
     await models.ProposalStatus.get_or_create(description="created")
     await models.ProposalStatus.get_or_create(description="dropped")
     await models.ProposalStatus.get_or_create(description="executed")

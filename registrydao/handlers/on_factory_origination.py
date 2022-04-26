@@ -1,6 +1,6 @@
 from registrydao.utils.ctx import extract_network_from_ctx
-from dipdup.models import OperationData, Transaction, Origination, BigMapDiff, BigMapData, BigMapAction
-from dipdup.context import HandlerContext, RollbackHandlerContext
+from dipdup.models import Origination
+from dipdup.context import HandlerContext
 from typing import cast
 
 
