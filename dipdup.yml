@@ -146,11 +146,6 @@ indexes:
           - type: transaction
             destination: registry_hangzhounet
             entrypoint: unfreeze
-  dao_hangzhounet:
-    template: registry_dao
-    values:
-      contract: registry_hangzhounet
-      datasource: tzkt_hangzhounet
 
   factory_ithacanet:
     kind: operation
@@ -202,11 +197,6 @@ indexes:
           - type: transaction
             destination: registry_ithacanet
             entrypoint: unfreeze
-  dao_ithacanet:
-    template: registry_dao
-    values:
-      contract: registry_ithacanet
-      datasource: tzkt_ithacanet
 
   factory_mainnet:
     kind: operation
@@ -258,9 +248,3 @@ indexes:
           - type: transaction
             destination: registry_mainnet
             entrypoint: unfreeze
-
-  dao_mainnet:
-    template: registry_dao
-    values:
-      contract: registry_mainnet
-      datasource: tzkt_mainnet
