@@ -108,8 +108,6 @@ async def on_origination(
     
     fetched_extra = registry_origination.data.storage['extra']
 
-    print(dao)
-
     if dao_type == 'registry':
         await models.RegistryExtra.get_or_create(
             registry=fetched_extra['registry'],
