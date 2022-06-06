@@ -57,8 +57,8 @@ class DAO(Model):
     staked = fields.DecimalField(54, 18)
     start_level = fields.IntField()
     name = fields.CharField(255)
-    description = fields.CharField(2500)
-    discourse = fields.CharField(2500)
+    description = fields.CharField(5000)
+    discourse = fields.CharField(5000)
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAOType", related_name="daos"
     )
@@ -73,8 +73,8 @@ class RegistryExtra(Model):
     dao: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
         "models.DAO"
     )
-    registry = fields.CharField(2500)
-    registry_affected = fields.CharField(2500)
+    registry = fields.CharField(5000)
+    registry_affected = fields.CharField(5000)
     frozen_extra_value = fields.CharField(255)
     frozen_scale_value = fields.CharField(255)
     slash_division_value = fields.CharField(255)
