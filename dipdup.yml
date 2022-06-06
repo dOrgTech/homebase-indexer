@@ -22,17 +22,11 @@ contracts:
   registry_mainnet:
     address: KT1DVkKk8Nm2kVBiQrNhn8hXab2DuTb17oib
     typename: registry
-  registry_hangzhounet:
-    address: KT1APQ6omMYF41QwXyvPaK8Wj3V3gRgBA9Zr
-    typename: registry
   registry_ithacanet:
     address: KT1CmG7cQ9BWJfd49hQ71dBYkYaJXhRoywgR
     typename: registry
 
 datasources:
-  tzkt_hangzhounet:
-    kind: tzkt
-    url: https://api.hangzhou2net.tzkt.io
   tzkt_ithacanet:
     kind: tzkt
     url: https://api.ithacanet.tzkt.io
@@ -96,57 +90,6 @@ templates:
             entrypoint: unfreeze
 
 indexes:
-  factory_hangzhounet:
-    kind: operation
-    datasource: tzkt_hangzhounet
-    types:
-      - origination
-    handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_hangzhounet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: propose
-      - callback: on_call_custom
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: callCustom
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: unstake_vote
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_hangzhounet
-            entrypoint: unfreeze
-
   factory_ithacanet:
     kind: operation
     datasource: tzkt_ithacanet
