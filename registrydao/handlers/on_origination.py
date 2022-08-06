@@ -16,14 +16,25 @@ def find_in_json(key_to_compare: str, key_name: str, data):
             return i
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
-    fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{BCD_NETWORK_MAP[network]}/{dao_address}/metadata')
+    if network == 'devnet':
+        LOCAL_BETTER_CALL_DEV_API = 'http://localhost:14000/v1'
+        fetched_metadata = await fetch(f'{LOCAL_BETTER_CALL_DEV_API}/account/sandboxnet/{dao_address}/metadata')
 
-    while fetched_metadata == None:
-        print(f'Metadata not yet indexed for DAO {dao_address}')
-        await sleep(5)
+        while fetched_metadata == None:
+            print(f'Metadata not yet indexed for DAO {dao_address}')
+            await sleep(5)
+            fetched_metadata = await fetch(f'{LOCAL_BETTER_CALL_DEV_API}/account/sandboxnet/{dao_address}/metadata')
+
+        return fetched_metadata
+    else:
         fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{BCD_NETWORK_MAP[network]}/{dao_address}/metadata')
 
-    return fetched_metadata
+        while fetched_metadata == None:
+            print(f'Metadata not yet indexed for DAO {dao_address}')
+            await sleep(5)
+            fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{BCD_NETWORK_MAP[network]}/{dao_address}/metadata')
+
+        return fetched_metadata
     
 
 async def on_origination(
@@ -35,13 +46,18 @@ async def on_origination(
     token_id = registry_origination.data.storage['governance_token']['token_id']
     dao_address = registry_origination.data.originated_contract_address
 
-    fetched_token_resp = (await fetch(
-        f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/tokens?contract={token_address}&tokenId={token_id}'))
+    if network == 'devnet':
+        fetched_token_resp = (await fetch(
+        f'http://localhost:5000/v1/tokens?contract={token_address}&tokenId={token_id}'))
+    else:
+        fetched_token_resp = (await fetch(
+            f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/tokens?contract={token_address}&tokenId={token_id}'))
 
     if not fetched_token_resp:
         return
 
     fetched_token = fetched_token_resp[0]
+    print("fetched_token: ", fetched_token);
     fetched_token_metadata = fetched_token['metadata']
 
     if('symbol' not in fetched_token_metadata):
