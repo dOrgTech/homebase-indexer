@@ -23,7 +23,7 @@ contracts:
     address: KT1JytEHBVBg27n9w85tNhSWUpbTvETD6rx6
     typename: registry
   registry_jakartanet:
-    address: KT1Pz2ZUhvbALAPNmJMG5ZX1ma3Rpnor8brg
+    address: KT1T13uvPNnRr7F9i4b6gPiCnWJtctKtXb6U
     typename: registry
 
 datasources:
@@ -94,41 +94,41 @@ indexes:
       - callback: on_factory_origination
         pattern:
           - type: origination
-            similar_to: registry_hangzhounet
+            similar_to: registry_jakartanet
       - callback: on_propose
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: propose
       - callback: on_call_custom
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: callCustom
       - callback: on_vote
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: vote
       - callback: on_drop_proposal
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: drop_proposal
       - callback: on_flush
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: flush
       - callback: on_freeze
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: freeze
       - callback: on_unfreeze
         pattern:
           - type: transaction
-            destination: registry_hangzhounet
+            destination: registry_jakartanet
             entrypoint: unfreeze
 
   factory_mainnet:
