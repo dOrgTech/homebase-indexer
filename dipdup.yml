@@ -22,14 +22,14 @@ contracts:
   registry_mainnet:
     address: KT1JytEHBVBg27n9w85tNhSWUpbTvETD6rx6
     typename: registry
-  registry_hangzhounet:
+  registry_jakartanet:
     address: KT1Pz2ZUhvbALAPNmJMG5ZX1ma3Rpnor8brg
     typename: registry
 
 datasources:
-  tzkt_hangzhounet:
+  tzkt_jakartanet:
     kind: tzkt
-    url: https://api.hangzhou2net.tzkt.io
+    url: https://api.jakartanet.tzkt.io
   tzkt_mainnet:
     kind: tzkt
     url: https://api.mainnet.tzkt.io
@@ -85,9 +85,9 @@ templates:
             entrypoint: unfreeze
 
 indexes:
-  factory_hangzhounet:
+  factory_jakartanet:
     kind: operation
-    datasource: tzkt_hangzhounet
+    datasource: tzkt_jakartanet
     types:
       - origination
     handlers:
