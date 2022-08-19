@@ -22,14 +22,14 @@ contracts:
   registry_mainnet:
     address: KT1DVkKk8Nm2kVBiQrNhn8hXab2DuTb17oib
     typename: registry
-  registry_jakartanet:
-    address: KT1PAnzELZqcGdLuc6bXbvwvfiG4oKY9HAeY
+  registry_ghostnet:
+    address: KT1EyhSPB6iWKCAhX7JomoBPpfS9mKfQazXa
     typename: registry
 
 datasources:
-  tzkt_jakartanet:
+  tzkt_ghostnet:
     kind: tzkt
-    url: https://api.jakartanet.tzkt.io
+    url: https://api.ghostnet.tzkt.io
   tzkt_mainnet:
     kind: tzkt
     url: https://api.mainnet.tzkt.io
@@ -90,55 +90,55 @@ templates:
             entrypoint: unfreeze
 
 indexes:
-  factory_jakartanet:
+  factory_ghostnet:
     kind: operation
-    datasource: tzkt_jakartanet
+    datasource: tzkt_ghostnet
     types:
       - origination
     handlers:
       - callback: on_factory_origination
         pattern:
           - type: origination
-            similar_to: registry_jakartanet
+            similar_to: registry_ghostnet
       - callback: on_propose
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: propose
       - callback: on_call_custom
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: callCustom
       - callback: on_vote
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: vote
       - callback: on_drop_proposal
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: drop_proposal
       - callback: on_unstake_vote
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: unstake_vote
       - callback: on_flush
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: flush
       - callback: on_freeze
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: freeze
       - callback: on_unfreeze
         pattern:
           - type: transaction
-            destination: registry_jakartanet
+            destination: registry_ghostnet
             entrypoint: unfreeze
 
   factory_mainnet:
