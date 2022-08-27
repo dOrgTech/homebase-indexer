@@ -132,5 +132,5 @@ async def on_origination(
                 dao=dao[0]
             )
     except Exception as e:
-        print("Error in Origination Handler" + str(registry_origination.data.originated_contract_address))
+        print("Error in Origination Handler: " + str(registry_origination.data.originated_contract_address))
         print(e)
