@@ -14,13 +14,16 @@ async def on_drop_proposal(
     ctx: HandlerContext,
     drop_proposal: Transaction[DropProposalParameter, RegistryStorage],
 ) -> None:
+    try:
+        dao_address = drop_proposal.data.target_address
 
-    dao_address = drop_proposal.data.target_address
+        await update_ledger(dao_address, drop_proposal.data.diffs)
 
-    await update_ledger(dao_address, drop_proposal.data.diffs)
-
-    dao = await models.DAO.get(address=dao_address)
-    status = await models.ProposalStatus.get(description='dropped')
-    proposal = await models.Proposal.get(key=drop_proposal.data.parameter_json, dao=dao)
-    
-    await models.ProposalStatusUpdates.get_or_create(status=status, proposal=proposal, timestamp=drop_proposal.data.timestamp, level=drop_proposal.data.level)
+        dao = await models.DAO.get(address=dao_address)
+        status = await models.ProposalStatus.get(description='dropped')
+        proposal = await models.Proposal.get(key=drop_proposal.data.parameter_json, dao=dao)
+        
+        await models.ProposalStatusUpdates.get_or_create(status=status, proposal=proposal, timestamp=drop_proposal.data.timestamp, level=drop_proposal.data.level)
+    except Exception as e:
+        print("Error in on_drop_proposal: " + str(drop_proposal.data.target_address))
+        print(e)

@@ -14,4 +14,8 @@ async def on_unfreeze(
     ctx: HandlerContext,
     unfreeze: Transaction[UnfreezeParameter, RegistryStorage],
 ) -> None:
-    await update_ledger(unfreeze.data.target_address, unfreeze.data.diffs)
+    try:
+        await update_ledger(unfreeze.data.target_address, unfreeze.data.diffs)
+    except Exception as e:
+        print("Error in on_unfreeze: " + str(unfreeze.data.target_address))
+        print(e)
