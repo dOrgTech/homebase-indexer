@@ -17,8 +17,10 @@ async def on_propose(
 ) -> None:
     try:
         dao_address = propose.data.target_address
+        print("dao_address: " + dao_address)
         proposal_diff = propose.data.diffs[0]['content']
-        
+        print("proposal_diff: " + proposal_diff)
+
         await update_ledger(dao_address, propose.data.diffs)
 
         dao = await models.DAO.get(address=dao_address).prefetch_related('governance_token')

@@ -2,8 +2,9 @@
 #   filename:  storage.json
 
 from __future__ import annotations
+from optparse import Option
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Extra
 
@@ -87,39 +88,61 @@ class StakedVote(BaseModel):
 
     key: Key1
     value: str
+    
+    
+class DAOConfig(BaseModel):
+    class Config:
+        extra = Extra.forbid
+    
+    fixed_proposal_fee_in_token: str
+    governance_total_supply: str
+    max_quorum_change: str
+    max_quorum_threshold: str
+    min_quorum_threshold: str
+    period: str
+    proposal_expired_level: str
+    proposal_flush_level: str
+    quorum_change: str
+    
+class TransferProposalExtra(BaseModel):
+    class Config:
+        extra = Extra.forbid
 
+    code: str
+
+class Lambdas(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    transfer_proposal: TransferProposalExtra
+
+
+class ExtraConfig(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    lambdas: Lambdas
+    handler_storage: Optional[Dict[str, str]]
+    
 
 class RegistryStorage(BaseModel):
     class Config:
         extra = Extra.forbid
 
     admin: str
-    custom_entrypoints: Dict[str, str]
-    decision_lambda: str
+    config: Dict[str, str]
     delegates: List[Delegate]
-    extra: Dict[str, str]
-    fixed_proposal_fee_in_token: str
+    extra: Dict[str, Any]
     freeze_history: Dict[str, FreezeHistory]
     frozen_token_id: str
     frozen_total_supply: str
     governance_token: GovernanceToken
-    governance_total_supply: str
     guardian: str
-    max_proposals: str
-    max_quorum_change: str
-    max_quorum_threshold: str
     metadata: Dict[str, str]
-    min_quorum_threshold: str
     pending_owner: str
-    period: str
     permits_counter: str
-    proposal_check: str
-    proposal_expired_level: str
-    proposal_flush_level: str
-    proposal_key_list_sort_by_level: List[ProposalKeyListSortByLevelItem]
     proposals: Dict[str, Proposals]
-    quorum_change: str
     quorum_threshold_at_cycle: QuorumThresholdAtCycle
-    rejected_proposal_slash_value: str
     staked_votes: List[StakedVote]
     start_level: str
+    ongoing_proposals_dlist: Optional[str] = None

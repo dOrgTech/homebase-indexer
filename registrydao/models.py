@@ -1,3 +1,4 @@
+from cgitb import handler
 from enum import unique
 from tortoise import Model, fields
 
@@ -41,10 +42,10 @@ class DAO(Model):
     )
     admin = fields.CharField(36)
     guardian = fields.CharField(36)
-    ledger: fields.ReverseRelation["Ledger"]
+    ledgers: fields.ReverseRelation["Ledger"]
     transfers: fields.ReverseRelation["Transfer"]
     proposals: fields.ReverseRelation["Proposal"]
-    max_proposals = fields.CharField(255)
+    # max_proposals = fields.CharField(255)
     max_quorum_change = fields.CharField(255)
     max_quorum_threshold = fields.DecimalField(54, 18)
     min_quorum_threshold = fields.DecimalField(54, 18)
@@ -52,6 +53,7 @@ class DAO(Model):
     proposal_expired_level = fields.IntField()
     proposal_flush_level = fields.IntField()
     quorum_change = fields.CharField(255)
+    fixed_proposal_fee_in_token = fields.CharField(255)
     last_updated_cycle = fields.CharField(255)
     quorum_threshold = fields.DecimalField(54, 18)
     staked = fields.DecimalField(54, 18)
