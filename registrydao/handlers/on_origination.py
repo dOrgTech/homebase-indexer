@@ -1,7 +1,7 @@
 from asyncio import sleep
 from datetime import datetime
 from registrydao.utils.ctx import extract_network_from_ctx
-from registrydao.constants import BETTER_CALL_DEV_API, BCD_NETWORK_MAP, WHITE_BETTER_CALL_DEV_API
+from registrydao.constants import DIPDUP_METADATA_API, NETWORK_MAP
 from registrydao.utils.http import fetch
 
 from dipdup.context import HandlerContext
@@ -16,12 +16,13 @@ def find_in_json(key_to_compare: str, key_name: str, data):
             return i
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
-    fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{BCD_NETWORK_MAP[network]}/{dao_address}/metadata')
-
+    fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
+    # https://metadata.dipdup.net/api/rest/contract_metadata?contract=KT1BxBvA6WBdYZsToVJDxNdxNJEi359UBYYu&network=mainnet
+    
     while fetched_metadata == None:
         print(f'Metadata not yet indexed for DAO {dao_address}')
         await sleep(5)
-        fetched_metadata = await fetch(f'{BETTER_CALL_DEV_API}/account/{BCD_NETWORK_MAP[network]}/{dao_address}/metadata')
+        fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
 
     return fetched_metadata
     
@@ -37,7 +38,7 @@ async def on_origination(
         dao_address = registry_origination.data.originated_contract_address
 
         fetched_token_resp = (await fetch(
-            f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/tokens?contract={token_address}&tokenId={token_id}'))
+            f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/tokens?contract={token_address}&tokenId={token_id}'))
 
         if not fetched_token_resp:
             return
@@ -48,11 +49,15 @@ async def on_origination(
         if('symbol' not in fetched_token_metadata):
             return
 
-        fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
-        dao_type = fetched_metadata['extras']['template']
-
-        if 'discourse' in fetched_metadata['extras'] and fetched_metadata['extras']['discourse']:
-            discourse = fetched_metadata['extras']['discourse'].strip("/")
+        fetched_metadata_arr = await wait_and_fetch_metadata(network, dao_address)
+        print("fetched_metadata_arr", fetched_metadata_arr)
+        fetched_metadata = fetched_metadata_arr["contract_metadata"][0]["metadata"]
+        print("fetched_metadata", fetched_metadata)
+        dao_type = fetched_metadata['template']
+        print(dao_type, "dao_type")
+        
+        if 'discourse' in fetched_metadata and fetched_metadata['discourse']:
+            discourse = fetched_metadata['discourse'].strip("/")
         else:
             discourse = "forum.tezosagora.org"
 

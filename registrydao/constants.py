@@ -1,6 +1,5 @@
-WHITE_BETTER_CALL_DEV_API = 'https://white.better-call.dev/v1'
-BETTER_CALL_DEV_API = 'https://bff.better-call.dev/v1'
-BCD_NETWORK_MAP = {
+DIPDUP_METADATA_API = 'https://metadata.dipdup.net/api/rest'
+NETWORK_MAP = {
   "mainnet": "mainnet",
   "ghostnet": "ghostnet"
 }
