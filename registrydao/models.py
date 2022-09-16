@@ -1,5 +1,5 @@
 from enum import unique
-from tortoise import Model, fields
+from dipdup.models import Model, fields
 
 
 class DAOType(Model):
@@ -37,7 +37,7 @@ class DAO(Model):
     address = fields.CharField(36, unique=True)
     frozen_token_id = fields.IntField()
     governance_token: fields.ForeignKeyRelation[Token] = fields.ForeignKeyField(
-        "models.Token", related_name="daos"
+        "models.Token"
     )
     admin = fields.CharField(36)
     guardian = fields.CharField(36)
@@ -60,7 +60,7 @@ class DAO(Model):
     description = fields.CharField(5000)
     discourse = fields.CharField(5000)
     type: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
-        "models.DAOType", related_name="daos"
+        "models.DAOType"
     )
     network = fields.CharField(36)
 
@@ -119,10 +119,10 @@ class Ledger(Model):
     past_unstaked = fields.DecimalField(54, 18)
     staked = fields.DecimalField(54, 18)
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
-        "models.DAO", related_name="ledger"
+        "models.DAO"
     )
     holder: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
-        "models.Holder", related_name="ledger"
+        "models.Holder"
     )
 
     class Meta:
@@ -141,7 +141,7 @@ class ProposalStatus(Model):
 class Proposal(Model):
     id = fields.IntField(pk=True)
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
-        "models.DAO", related_name="proposals"
+        "models.DAO"
     )
     hash=fields.CharField(128)
     key=fields.CharField(128)
@@ -151,7 +151,7 @@ class Proposal(Model):
     start_date = fields.DatetimeField()
     metadata = fields.CharField(10000)
     proposer: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
-        "models.Holder", related_name="proposals"
+        "models.Holder"
     )
     voting_stage_num=fields.CharField(50)
     proposer_frozen_token=fields.CharField(50)
@@ -166,12 +166,12 @@ class Proposal(Model):
 class Vote(Model):
     id = fields.IntField(pk=True)
     proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
-        "models.Proposal", related_name="votes"
+        "models.Proposal"
     )
     amount = fields.DecimalField(54, 18)
     support = fields.BooleanField()
     voter: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
-        "models.Holder", related_name="votes"
+        "models.Holder"
     )
 
     class Meta:
@@ -181,7 +181,7 @@ class Transfer(Model):
     id = fields.IntField(pk=True)
     timestamp = fields.DatetimeField()
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
-        "models.DAO", related_name="transfers"
+        "models.DAO"
     )
     amount = fields.CharField(128)
     integer_amount = fields.BigIntField()
@@ -194,10 +194,10 @@ class ProposalStatusUpdates(Model):
     timestamp = fields.DatetimeField()
     level = fields.IntField()
     status: fields.ForeignKeyRelation[ProposalStatus] = fields.ForeignKeyField(
-        "models.ProposalStatus", related_name="status_updates"
+        "models.ProposalStatus"
     )
     proposal: fields.ForeignKeyRelation[Proposal] = fields.ForeignKeyField(
-        "models.Proposal", related_name="status_updates"
+        "models.Proposal"
     )
 
     class Meta:
