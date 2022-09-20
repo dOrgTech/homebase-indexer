@@ -2,19 +2,33 @@
 #   filename:  storage.json
 
 from __future__ import annotations
-from optparse import Option
 
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Extra
 
 
+class Config(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    fixed_proposal_fee_in_token: str
+    governance_total_supply: str
+    max_quorum_change: str
+    max_quorum_threshold: str
+    min_quorum_threshold: str
+    period: str
+    proposal_expired_level: str
+    proposal_flush_level: str
+    quorum_change: str
+
+
 class Key(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    delegate: str
     owner: str
+    delegate: str
 
 
 class Delegate(BaseModel):
@@ -23,6 +37,23 @@ class Delegate(BaseModel):
 
     key: Key
     value: Dict[str, Any]
+
+
+class Lambdas(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    code: str
+    handler_check: str
+    is_active: bool
+
+
+class ExtraModel(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    handler_storage: Dict[str, str]
+    lambdas: Dict[str, Lambdas]
 
 
 class FreezeHistory(BaseModel):
@@ -43,12 +74,29 @@ class GovernanceToken(BaseModel):
     token_id: str
 
 
-class ProposalKeyListSortByLevelItem(BaseModel):
+class Key1(BaseModel):
     class Config:
         extra = Extra.forbid
 
     bytes: str
-    nat: str
+    bool: bool
+
+
+class MapItem(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    key: Key1
+    value: str
+
+
+class OngoingProposalsDlistItem(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    first: str
+    last: str
+    map: List[MapItem]
 
 
 class Proposals(BaseModel):
@@ -74,7 +122,7 @@ class QuorumThresholdAtCycle(BaseModel):
     staked: str
 
 
-class Key1(BaseModel):
+class Key2(BaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -86,63 +134,28 @@ class StakedVote(BaseModel):
     class Config:
         extra = Extra.forbid
 
-    key: Key1
+    key: Key2
     value: str
-    
-    
-class DAOConfig(BaseModel):
-    class Config:
-        extra = Extra.forbid
-    
-    fixed_proposal_fee_in_token: str
-    governance_total_supply: str
-    max_quorum_change: str
-    max_quorum_threshold: str
-    min_quorum_threshold: str
-    period: str
-    proposal_expired_level: str
-    proposal_flush_level: str
-    quorum_change: str
-    
-class TransferProposalExtra(BaseModel):
-    class Config:
-        extra = Extra.forbid
 
-    code: str
-
-class Lambdas(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    transfer_proposal: TransferProposalExtra
-
-
-class ExtraConfig(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    lambdas: Lambdas
-    handler_storage: Optional[Dict[str, str]]
-    
 
 class RegistryStorage(BaseModel):
     class Config:
         extra = Extra.forbid
 
     admin: str
-    config: Dict[str, str]
+    config: Config
     delegates: List[Delegate]
-    extra: Dict[str, Any]
+    extra: ExtraModel
     freeze_history: Dict[str, FreezeHistory]
     frozen_token_id: str
     frozen_total_supply: str
     governance_token: GovernanceToken
     guardian: str
     metadata: Dict[str, str]
+    ongoing_proposals_dlist: Optional[OngoingProposalsDlistItem]
     pending_owner: str
     permits_counter: str
     proposals: Dict[str, Proposals]
     quorum_threshold_at_cycle: QuorumThresholdAtCycle
     staked_votes: List[StakedVote]
     start_level: str
-    ongoing_proposals_dlist: Optional[str] = None
