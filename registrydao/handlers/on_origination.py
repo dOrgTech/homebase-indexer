@@ -17,7 +17,6 @@ def find_in_json(key_to_compare: str, key_name: str, data):
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
     fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
-    # https://metadata.dipdup.net/api/rest/contract_metadata?contract=KT1BxBvA6WBdYZsToVJDxNdxNJEi359UBYYu&network=mainnet
     
     while fetched_metadata == None:
         print(f'Metadata not yet indexed for DAO {dao_address}')
@@ -50,11 +49,8 @@ async def on_origination(
             return
 
         fetched_metadata_arr = await wait_and_fetch_metadata(network, dao_address)
-        print("fetched_metadata_arr", fetched_metadata_arr)
         fetched_metadata = fetched_metadata_arr["contract_metadata"][0]["metadata"]
-        print("fetched_metadata", fetched_metadata)
         dao_type = fetched_metadata['template']
-        print(dao_type, "dao_type")
         
         if 'discourse' in fetched_metadata and fetched_metadata['discourse']:
             discourse = fetched_metadata['discourse'].strip("/")
