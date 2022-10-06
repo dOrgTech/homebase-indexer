@@ -23,16 +23,16 @@ contracts:
   #   address: KT1Je26VLhis2X8FaTda7SQT4PsstmCZL2ez
   #   typename: registry
   registry_ghostnet:
-    address: KT1LJj1bJ91CK4HRNBtBT7LojU7rUGW5yVyt
+    address: KT1MFNuLR6yDCSBiDDKcsvVyNWcZVWNCFRTf
     typename: registry
 
 datasources:
-  tzkt_ghostnet:
-    kind: tzkt
-    url: https://api.ghostnet.tzkt.io
   # tzkt_mainnet:
   #   kind: tzkt
   #   url: https://api.mainnet.tzkt.io
+  tzkt_ghostnet:
+    kind: tzkt
+    url: https://api.ghostnet.tzkt.io
 
 templates:
   registry_dao:
@@ -85,52 +85,6 @@ templates:
             entrypoint: unfreeze
 
 indexes:
-  factory_ghostnet:
-    kind: operation
-    datasource: tzkt_ghostnet
-    types:
-      - origination
-    handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_ghostnet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: propose
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: unstake_vote
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: unfreeze
-
   # factory_mainnet:
   #   kind: operation
   #   datasource: tzkt_mainnet
@@ -181,3 +135,48 @@ indexes:
   #         - type: transaction
   #           destination: registry_mainnet
   #           entrypoint: unfreeze
+  factory_ghostnet:
+    kind: operation
+    datasource: tzkt_ghostnet
+    types:
+      - origination
+    handlers:
+      - callback: on_factory_origination
+        pattern:
+          - type: origination
+            similar_to: registry_ghostnet
+      - callback: on_propose
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: propose
+      - callback: on_vote
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: vote
+      - callback: on_drop_proposal
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: drop_proposal
+      - callback: on_unstake_vote
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: unstake_vote
+      - callback: on_flush
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: flush
+      - callback: on_freeze
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: freeze
+      - callback: on_unfreeze
+        pattern:
+          - type: transaction
+            destination: registry_ghostnet
+            entrypoint: unfreeze

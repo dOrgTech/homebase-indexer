@@ -102,6 +102,23 @@ class TreasuryExtra(Model):
     class Meta:
         table = 'treasury_extra'
 
+class LambdaExtra(Model):
+    id = fields.IntField(pk=True)
+    dao: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
+        "models.DAO"
+    )
+    registry = fields.CharField(5000)
+    registry_affected = fields.CharField(5000)
+    frozen_extra_value = fields.CharField(255)
+    frozen_scale_value = fields.CharField(255)
+    slash_division_value = fields.CharField(255)
+    min_xtz_amount = fields.CharField(255)
+    max_xtz_amount = fields.CharField(255)
+    slash_scale_value = fields.CharField(255)
+    max_proposal_size = fields.CharField(255)
+
+    class Meta:
+        table = 'lambda_extra'
 
 class Holder(Model):
     id = fields.IntField(pk=True)

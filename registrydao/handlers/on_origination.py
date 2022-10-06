@@ -1,5 +1,8 @@
+import json
+
 from asyncio import sleep
 from datetime import datetime
+from importlib.metadata import metadata
 from registrydao.utils.ctx import extract_network_from_ctx
 from registrydao.constants import DIPDUP_METADATA_API, NETWORK_MAP
 from registrydao.utils.http import fetch
@@ -16,15 +19,14 @@ def find_in_json(key_to_compare: str, key_name: str, data):
             return i
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
-    fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
-    # https://metadata.dipdup.net/api/rest/contract_metadata?contract=KT1BxBvA6WBdYZsToVJDxNdxNJEi359UBYYu&network=mainnet
+    fetched_metadata_location = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{dao_address}/bigmaps/metadata/keys')
+    metadata_location_hash = fetched_metadata_location[0]["value"]
+    metadata_uri = bytes.fromhex(metadata_location_hash).decode('utf-8')
+    metadata_contract = metadata_uri.split('/')[2]
+    fetched_metadata = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{metadata_contract}/bigmaps/metadata/keys/metadataKey')
+    metadata = bytes.fromhex(fetched_metadata["value"]).decode('utf-8')
     
-    while fetched_metadata == None:
-        print(f'Metadata not yet indexed for DAO {dao_address}')
-        await sleep(5)
-        fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
-
-    return fetched_metadata
+    return json.loads(metadata)
     
 
 async def on_origination(
@@ -49,8 +51,7 @@ async def on_origination(
         if('symbol' not in fetched_token_metadata):
             return
 
-        fetched_metadata_arr = await wait_and_fetch_metadata(network, dao_address)
-        fetched_metadata = fetched_metadata_arr["contract_metadata"][0]["metadata"]
+        fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
         dao_type = fetched_metadata['template']
         
         if 'discourse' in fetched_metadata and fetched_metadata['discourse']:
@@ -110,30 +111,44 @@ async def on_origination(
             discourse=discourse
         )
             
-            # fetched_extra = registry_origination.data.storage['extra']
+        fetched_extra = registry_origination.data.storage["extra"]
 
-            # if dao_type == 'registry':
-            #     await models.RegistryExtra.get_or_create(
-            #         registry=fetched_extra['registry'],
-            #         registry_affected=fetched_extra['registry_affected'],
-            #         frozen_extra_value=fetched_extra['frozen_extra_value'],
-            #         frozen_scale_value=fetched_extra['frozen_scale_value'],
-            #         slash_division_value=fetched_extra['slash_division_value'],
-            #         min_xtz_amount=fetched_extra['min_xtz_amount'],
-            #         max_xtz_amount=fetched_extra['max_xtz_amount'],
-            #         slash_scale_value=fetched_extra['slash_scale_value'],
-            #         dao=dao[0]
-            #     )
-            # else:
-            #     await models.TreasuryExtra.get_or_create(
-            #         frozen_extra_value=fetched_extra['frozen_extra_value'],
-            #         frozen_scale_value=fetched_extra['frozen_scale_value'],
-            #         slash_division_value=fetched_extra['slash_division_value'],
-            #         min_xtz_amount=fetched_extra['min_xtz_amount'],
-            #         max_xtz_amount=fetched_extra['max_xtz_amount'],
-            #         slash_scale_value=fetched_extra['slash_scale_value'],
-            #         dao=dao[0]
-            #     )
+        if dao_type == 'registry':
+            await models.RegistryExtra.get_or_create(
+                registry=fetched_extra['registry'],
+                registry_affected=fetched_extra['registry_affected'],
+                frozen_extra_value=fetched_extra['frozen_extra_value'],
+                frozen_scale_value=fetched_extra['frozen_scale_value'],
+                slash_division_value=fetched_extra['slash_division_value'],
+                min_xtz_amount=fetched_extra['min_xtz_amount'],
+                max_xtz_amount=fetched_extra['max_xtz_amount'],
+                slash_scale_value=fetched_extra['slash_scale_value'],
+                dao=dao[0]
+            )
+        else:
+            if dao_type == 'lambda':
+                await models.LambdaExtra.get_or_create(
+                    registry=fetched_extra["handler_storage"]['registry'],
+                    registry_affected=fetched_extra["handler_storage"]['registry_affected'],
+                    frozen_extra_value=fetched_extra["handler_storage"]['frozen_extra_value'],
+                    frozen_scale_value=fetched_extra["handler_storage"]['frozen_scale_value'],
+                    slash_division_value=fetched_extra["handler_storage"]['slash_division_value'],
+                    min_xtz_amount=fetched_extra["handler_storage"]['min_xtz_amount'],
+                    max_xtz_amount=fetched_extra["handler_storage"]['max_xtz_amount'],
+                    slash_scale_value=fetched_extra["handler_storage"]['slash_scale_value'],
+                    max_proposal_size=fetched_extra["handler_storage"]['max_proposal_size'],
+                    dao=dao[0]
+                )
+            else: 
+                await models.TreasuryExtra.get_or_create(
+                    frozen_extra_value=fetched_extra['frozen_extra_value'],
+                    frozen_scale_value=fetched_extra['frozen_scale_value'],
+                    slash_division_value=fetched_extra['slash_division_value'],
+                    min_xtz_amount=fetched_extra['min_xtz_amount'],
+                    max_xtz_amount=fetched_extra['max_xtz_amount'],
+                    slash_scale_value=fetched_extra['slash_scale_value'],
+                    dao=dao[0]
+                )
     except Exception as e:
         print("Error in Origination Handler: " + str(registry_origination.data.originated_contract_address))
         print(e)
