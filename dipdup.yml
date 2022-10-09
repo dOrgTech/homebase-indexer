@@ -23,7 +23,7 @@ contracts:
   #   address: KT1Je26VLhis2X8FaTda7SQT4PsstmCZL2ez
   #   typename: registry
   registry_ghostnet:
-    address: KT1MFNuLR6yDCSBiDDKcsvVyNWcZVWNCFRTf
+    address: KT1QZtF8vVUvZYRxttRwgftc4EaQHZWgzXNp
     typename: registry
 
 datasources:
