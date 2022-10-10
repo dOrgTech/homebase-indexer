@@ -1,3 +1,5 @@
+import json
+
 from asyncio import sleep
 from datetime import datetime
 from registrydao.utils.ctx import extract_network_from_ctx
@@ -16,15 +18,14 @@ def find_in_json(key_to_compare: str, key_name: str, data):
             return i
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
-    fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
+    fetched_metadata_location = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{dao_address}/bigmaps/metadata/keys')
+    metadata_location_hash = fetched_metadata_location[0]["value"]
+    metadata_uri = bytes.fromhex(metadata_location_hash).decode('utf-8')
+    metadata_contract = metadata_uri.split('/')[2]
+    fetched_metadata = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{metadata_contract}/bigmaps/metadata/keys/metadataKey')
+    metadata = bytes.fromhex(fetched_metadata["value"]).decode('utf-8')
     
-    while fetched_metadata == None:
-        print(f'Metadata not yet indexed for DAO {dao_address}')
-        await sleep(5)
-        fetched_metadata = await fetch(f'{DIPDUP_METADATA_API}/contract_metadata?contract={dao_address}&network={NETWORK_MAP[network]}')
-
-    return fetched_metadata
-    
+    return json.loads(metadata)
 
 async def on_origination(
         ctx: HandlerContext,
@@ -48,8 +49,7 @@ async def on_origination(
         if('symbol' not in fetched_token_metadata):
             return
 
-        fetched_metadata_arr = await wait_and_fetch_metadata(network, dao_address)
-        fetched_metadata = fetched_metadata_arr["contract_metadata"][0]["metadata"]
+        fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
         dao_type = fetched_metadata['template']
         
         if 'discourse' in fetched_metadata and fetched_metadata['discourse']:
