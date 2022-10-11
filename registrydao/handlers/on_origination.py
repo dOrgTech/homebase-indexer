@@ -4,7 +4,7 @@ from asyncio import sleep
 from datetime import datetime
 from importlib.metadata import metadata
 from registrydao.utils.ctx import extract_network_from_ctx
-from registrydao.constants import DIPDUP_METADATA_API, NETWORK_MAP
+from registrydao.constants import NETWORK_MAP
 from registrydao.utils.http import fetch
 
 from dipdup.context import HandlerContext
@@ -20,8 +20,8 @@ def find_in_json(key_to_compare: str, key_name: str, data):
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
     fetched_metadata_location = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{dao_address}/bigmaps/metadata/keys')
-    metadata_location_hash = fetched_metadata_location[0]["value"]
-    metadata_uri = bytes.fromhex(metadata_location_hash).decode('utf-8')
+    metadata_location_hex = fetched_metadata_location[0]["value"]
+    metadata_uri = bytes.fromhex(metadata_location_hex).decode('utf-8')
     metadata_contract = metadata_uri.split('/')[2]
     fetched_metadata = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{metadata_contract}/bigmaps/metadata/keys/metadataKey')
     metadata = bytes.fromhex(fetched_metadata["value"]).decode('utf-8')
