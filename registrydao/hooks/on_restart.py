@@ -12,6 +12,7 @@ async def on_restart(
         await models.ProposalStatus.get_or_create(description="rejected_and_flushed")
         await models.DAOType.get_or_create(name='treasury')
         await models.DAOType.get_or_create(name='registry')
+        await models.DAOType.get_or_create(name='lambda')
     except Exception as e:
         print("Error in on_restart")
         print(e)

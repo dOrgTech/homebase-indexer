@@ -17,12 +17,12 @@ async def on_flush(
     flush: Transaction[FlushParameter, RegistryStorage],
 ) -> None:
     try:
-        non_flushed_or_executed_keys = list(map(extract_key, flush.data.storage['proposal_key_list_sort_by_level']))
+        non_flushed_or_executed_keys = list(map(extract_key, flush.data.storage['proposals']))
         dao_address = flush.data.target_address
         dao = await models.DAO.get(address=dao_address)
         
         await update_ledger(dao_address, flush.data.diffs)
-        await update_extra(dao_address, flush.data.diffs)
+        await update_extra(dao_address, flush.data.storage['extra']['handler_storage'])
 
         dao.guardian = flush.data.storage["guardian"]
         await dao.save()
