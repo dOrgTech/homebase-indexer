@@ -16,11 +16,11 @@ def find_in_json(key_to_compare: str, key_name: str, data):
             return i
 
 async def wait_and_fetch_metadata(network: str, dao_address: str):
-    fetched_metadata_location = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{dao_address}/bigmaps/metadata/keys')
+    fetched_metadata_location = await fetch(f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/contracts/{dao_address}/bigmaps/metadata/keys')
     metadata_location_hex = fetched_metadata_location[0]["value"]
     metadata_uri = bytes.fromhex(metadata_location_hex).decode('utf-8')
     metadata_contract = metadata_uri.split('/')[2]
-    fetched_metadata = await fetch(f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/contracts/{metadata_contract}/bigmaps/metadata/keys/metadataKey')
+    fetched_metadata = await fetch(f'https://api.{BCD_NETWORK_MAP[network]}.tzkt.io/v1/contracts/{metadata_contract}/bigmaps/metadata/keys/metadataKey')
     metadata = bytes.fromhex(fetched_metadata["value"]).decode('utf-8')
     
     return json.loads(metadata)
