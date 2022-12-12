@@ -52,7 +52,7 @@ async def on_origination(
         fetched_metadata = await wait_and_fetch_metadata(network, dao_address)
         dao_type = fetched_metadata['template']
 
-        if 'discourse' in fetched_metadata['extras'] and fetched_metadata['extras']['discourse']:
+        if 'discourse' in fetched_metadata and fetched_metadata['extras']['discourse']:
             discourse = fetched_metadata['extras']['discourse'].strip("/")
         else:
             discourse = "forum.tezosagora.org"
