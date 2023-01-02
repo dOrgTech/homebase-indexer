@@ -87,48 +87,48 @@ templates:
 indexes:
   factory_mainnet:
     kind: operation
-    datasource: tzkt_ghostnet
+    datasource: tzkt_mainnet
     types:
       - origination
     handlers:
       - callback: on_factory_origination
         pattern:
           - type: origination
-            similar_to: registry_ghostnet
+            similar_to: registry_mainnet
       - callback: on_propose
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: propose
       - callback: on_vote
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: vote
       - callback: on_drop_proposal
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: drop_proposal
       - callback: on_unstake_vote
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: unstake_vote
       - callback: on_flush
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: flush
       - callback: on_freeze
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: freeze
       - callback: on_unfreeze
         pattern:
           - type: transaction
-            destination: registry_ghostnet
+            destination: registry_mainnet
             entrypoint: unfreeze
 
   factory_ghostnet:
