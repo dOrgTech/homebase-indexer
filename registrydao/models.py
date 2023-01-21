@@ -87,6 +87,7 @@ class RegistryExtra(Model):
     class Meta:
         table = 'registry_extra'
 
+
 class TreasuryExtra(Model):
     id = fields.IntField(pk=True)
     dao: fields.ForeignKeyRelation[DAOType] = fields.ForeignKeyField(
@@ -101,6 +102,7 @@ class TreasuryExtra(Model):
 
     class Meta:
         table = 'treasury_extra'
+
 
 class LambdaExtra(Model):
     id = fields.IntField(pk=True)
@@ -119,6 +121,7 @@ class LambdaExtra(Model):
 
     class Meta:
         table = 'lambda_extra'
+
 
 class Holder(Model):
     id = fields.IntField(pk=True)
@@ -148,6 +151,7 @@ class Ledger(Model):
         table = 'ledger'
         unique_together = (("dao", "holder"),)
 
+
 class ProposalStatus(Model):
     id = fields.IntField(pk=True)
     description = fields.CharField(36)
@@ -162,8 +166,8 @@ class Proposal(Model):
     dao: fields.ForeignKeyRelation[DAO] = fields.ForeignKeyField(
         "models.DAO"
     )
-    hash=fields.CharField(128)
-    key=fields.CharField(128)
+    hash = fields.CharField(128)
+    key = fields.CharField(128)
     upvotes = fields.DecimalField(54, 18)
     downvotes = fields.DecimalField(54, 18)
     start_level = fields.IntField()
@@ -172,9 +176,9 @@ class Proposal(Model):
     proposer: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder"
     )
-    voting_stage_num=fields.CharField(50)
-    proposer_frozen_token=fields.CharField(50)
-    quorum_threshold=fields.DecimalField(54, 18)
+    voting_stage_num = fields.CharField(50)
+    proposer_frozen_token = fields.CharField(50)
+    quorum_threshold = fields.DecimalField(54, 18)
     votes: fields.ReverseRelation["Vote"]
     status_updates: fields.ReverseRelation["ProposalStatusUpdates"]
 
@@ -188,6 +192,7 @@ class Vote(Model):
         "models.Proposal"
     )
     amount = fields.DecimalField(54, 18)
+    staked = fields.BooleanField()
     support = fields.BooleanField()
     voter: fields.ForeignKeyRelation[Holder] = fields.ForeignKeyField(
         "models.Holder"
@@ -195,6 +200,7 @@ class Vote(Model):
 
     class Meta:
         table = 'votes'
+
 
 class Transfer(Model):
     id = fields.IntField(pk=True)
@@ -207,6 +213,7 @@ class Transfer(Model):
     decimal_amount = fields.DecimalField(54, 18)
     from_address = fields.CharField(36)
     hash = fields.CharField(128)
+
 
 class ProposalStatusUpdates(Model):
     id = fields.IntField(pk=True)
