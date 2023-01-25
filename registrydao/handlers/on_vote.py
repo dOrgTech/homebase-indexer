@@ -33,15 +33,16 @@ async def on_vote(
             support=support,
             voter=voter[0],
             defaults={
-                'amount':amount
-            }
+                'amount': amount
+            },
+            staked=True
         )
 
         if support:
             proposal.upvotes = float(proposal.upvotes) + float(amount)
         else:
             proposal.downvotes = float(proposal.downvotes) + float(amount)
-        
+
         await proposal.save()
     except Exception as e:
         print("Error in on_vote: " + str(vote.data.target_address))
