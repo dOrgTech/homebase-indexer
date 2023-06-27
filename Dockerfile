@@ -1,4 +1,4 @@
-FROM dipdup/dipdup:6.1.2
+FROM dipdup/dipdup:6.5.7
 
 COPY requirements.txt .
 
