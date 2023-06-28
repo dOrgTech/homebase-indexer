@@ -18,11 +18,6 @@ async def on_factory_origination(
         network = extract_network_from_ctx(ctx)
         
         if index_name not in ctx.config.indexes:
-            await ctx.add_contract(
-                name=originated_contract,
-                address=originated_contract,
-                typename='registry',
-            )
             await ctx.add_index(
                 name=index_name,
                 template='registry_dao',
