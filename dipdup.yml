@@ -10,6 +10,11 @@ database:
   database: ${PG_DB:- }
   schema_name: ${PG_SCHEMA:-changeme}
 
+sentry:
+  dsn: ${SENTRY_DSN}
+  environment: prod
+  debug: True
+
 advanced:
   reindex:
     manual: wipe
