@@ -139,7 +139,7 @@ indexes:
   factory_ghostnet:
     kind: operation
     datasource: tzkt_ghostnet
-    first_level: 3159250
+    first_level: 3255385
     types:
       - origination
     handlers:
