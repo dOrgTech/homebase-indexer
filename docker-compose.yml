@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  dipdup:
+    build:
+      context: .
+      args:
+        PG_HOST: postgres
+        PG_PORT: 5432
+        PG_USER: devuser
+        PG_PASSWORD: devpass
+        PG_DB: devdb
+        PG_SCHEMA: public
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
