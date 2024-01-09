@@ -15,6 +15,7 @@ services:
           - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=indexer
           - HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES=true
       image: hasura/graphql-engine:v2.8.3.cli-migrations-v3
+      restart: always
     db:
       container_name: hb-indexer-postgres
       ports:
