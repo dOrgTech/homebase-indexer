@@ -3,11 +3,7 @@ package: registrydao
 
 database:
   kind: postgres
-  host: ${PG_HOST:-changeme}
-  port: ${PG_PORT:-5432}
-  user: ${PG_USER:-changeme}
-  password: ${PG_PASSWORD:-changeme}
-  database: ${PG_DB:- }
+  url: !env DATABASE_URL
   schema_name: ${PG_SCHEMA:-changeme}
 
 sentry:
