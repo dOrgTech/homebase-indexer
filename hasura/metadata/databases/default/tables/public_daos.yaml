@@ -1,0 +1,63 @@
+table:
+  name: daos
+  schema: public
+object_relationships:
+- name: governance_token
+  using:
+    foreign_key_constraint_on: governance_token_id
+- name: token
+  using:
+    foreign_key_constraint_on: governance_token_id
+- name: dao_type
+  using:
+    foreign_key_constraint_on: type_id
+array_relationships:
+- name: proposals
+  using:
+    foreign_key_constraint_on:
+      column: dao_id
+      table:
+        name: proposals
+        schema: public
+- name: ledgers
+  using:
+    foreign_key_constraint_on:
+      column: dao_id
+      table:
+        name: ledger
+        schema: public
+- name: lambda_extras
+  using:
+    foreign_key_constraint_on:
+      column: dao_id
+      table:
+        name: lambda_extra
+        schema: public
+- name: registry_extras
+  using:
+    foreign_key_constraint_on:
+      column: dao_id
+      table:
+        name: registry_extra
+        schema: public
+- name: treasury_extras
+  using:
+    foreign_key_constraint_on:
+      column: dao_id
+      table:
+        name: treasury_extra
+        schema: public
+- name: transfers
+  using:
+    foreign_key_constraint_on:
+      column: dao_id
+      table:
+        name: transfer
+        schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true
+    computed_fields: []

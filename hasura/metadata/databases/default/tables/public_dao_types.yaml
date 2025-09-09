@@ -1,0 +1,17 @@
+table:
+  name: dao_types
+  schema: public
+array_relationships:
+- name: daos
+  using:
+    foreign_key_constraint_on:
+      column: type_id
+      table:
+        name: daos
+        schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true

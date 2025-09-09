@@ -34,10 +34,11 @@ contracts:
 datasources:
   tzkt_mainnet:
     kind: tzkt
-    url: https://api.mainnet.tzkt.io
+    url: http://tzkt-mainnet
+
   tzkt_ghostnet:
     kind: tzkt
-    url: https://api.ghostnet.tzkt.io
+    url: http://tzkt-ghostnet
 
 templates:
   registry_dao:
@@ -93,6 +94,7 @@ indexes:
   factory_mainnet:
     kind: operation
     datasource: tzkt_mainnet
+    first_level: 30000
     types:
       - origination
     handlers:

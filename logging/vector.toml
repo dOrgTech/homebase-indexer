@@ -1,0 +1,25 @@
+# Collect logs from Docker
+[sources.docker]
+type = "docker_logs"
+# only collect from services you label
+include_labels = ["com.axiom.collect=true"]
+auto_partial_merge = true  # fixes long lines Docker splits
+
+# (Optional) add small enrichment, filters, routing, etc. with transforms
+
+# Send to Axiom
+[sinks.axiom]
+type = "axiom"
+inputs = ["docker"]
+dataset = "${AXIOM_DATASET}"
+token   = "${AXIOM_TOKEN}"
+# If you use a personal token, uncomment and set org_id:
+# org_id  = "${AXIOM_ORG_ID}"
+# If your org is in EU, uncomment:
+# url = "https://api.eu.axiom.co"
+
+# Durable buffering so you don't lose logs if Axiom is briefly unreachable
+[sinks.axiom.buffer]
+type = "disk"
+max_size = 268435488  # ~256 MB
+when_full = "block"

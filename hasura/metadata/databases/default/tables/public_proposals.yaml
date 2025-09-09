@@ -1,0 +1,34 @@
+table:
+  name: proposals
+  schema: public
+object_relationships:
+- name: dao
+  using:
+    foreign_key_constraint_on: dao_id
+- name: proposer
+  using:
+    foreign_key_constraint_on: proposer_id
+- name: holder
+  using:
+    foreign_key_constraint_on: proposer_id
+array_relationships:
+- name: votes
+  using:
+    foreign_key_constraint_on:
+      column: proposal_id
+      table:
+        name: votes
+        schema: public
+- name: status_updates
+  using:
+    foreign_key_constraint_on:
+      column: proposal_id
+      table:
+        name: status_updates
+        schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true
