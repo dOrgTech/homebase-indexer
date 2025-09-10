@@ -1,0 +1,17 @@
+table:
+  name: proposal_statuses
+  schema: public
+array_relationships:
+- name: status_updates
+  using:
+    foreign_key_constraint_on:
+      column: status_id
+      table:
+        name: status_updates
+        schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true

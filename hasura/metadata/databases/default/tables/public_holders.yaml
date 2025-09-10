@@ -1,0 +1,31 @@
+table:
+  name: holders
+  schema: public
+array_relationships:
+- name: proposals
+  using:
+    foreign_key_constraint_on:
+      column: proposer_id
+      table:
+        name: proposals
+        schema: public
+- name: votes
+  using:
+    foreign_key_constraint_on:
+      column: voter_id
+      table:
+        name: votes
+        schema: public
+- name: ledgers
+  using:
+    foreign_key_constraint_on:
+      column: holder_id
+      table:
+        name: ledger
+        schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true

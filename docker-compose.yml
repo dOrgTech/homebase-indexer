@@ -1,33 +1,64 @@
-version: '3.3'
 services:
+    vector:
+      image: ghcr.io/vectordotdev/vector:latest-alpine
+      command: ["--config", "/etc/vector/vector.toml"]
+      environment:
+        AXIOM_DATASET: ${AXIOM_DATASET:-homebase-app}           # change to your dataset name
+        AXIOM_TOKEN: ${AXIOM_TOKEN}              # export in your shell or .env
+        AXIOM_ORG_ID: ${AXIOM_ORG}       # only if using personal token
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - ./logging/vector.toml:/etc/vector/vector.toml:ro
+        - vector-data:/var/lib/vector
+      restart: unless-stopped
+
+
+    tzkt-proxy:
+      image: nginx:1.25-alpine
+      restart: unless-stopped
+      networks: 
+        v3-homebase-indexer:
+          aliases:
+            - tzkt-mainnet
+            - tzkt-ghostnet       
+      volumes:
+        - ./nginx-tzkt.conf:/etc/nginx/conf.d/default.conf:ro
+
     hasura:
       depends_on:
         - db
-      # command:
-      #   - "hasura metadata track --all-tables [--schema public]"
       ports:
-          - '0.0.0.0:8080:8080'
+          - '0.0.0.0:9088:8080'
       environment:
-          - 'HASURA_GRAPHQL_DATABASE_URL=postgres://indexer:qwerty@hb-indexer-postgres:5432/indexer_db'
+          - 'HASURA_GRAPHQL_DATABASE_URL=postgres://indexer:qwerty@db:5432/indexer_db'
           - HASURA_GRAPHQL_ENABLE_CONSOLE=true
           - HASURA_GRAPHQL_DEV_MODE=true
-          - HASURA_GRAPHQL_ADMIN_SECRET=changeme
+          - HASURA_GRAPHQL_ADMIN_SECRET=qanvse4NVSmv2gFqw3M0vWXaCJyIMllbV75Z5gTWq3neRuYgJLCLmQmw8
           - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=indexer
           - HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES=true
-      image: hasura/graphql-engine:v2.8.3.cli-migrations-v3
+          - 'HASURA_GRAPHQL_CORS_DOMAIN=https://tezos-homebase.io, https://*.tezos-homebase.io, https://*.netlify.app, http://localhost:3000, http://localhost:8080, http://localhost:8088, http://localhost:8000, http://localhost:8001, http://localhost:8002, http://localhost:8003, http://localhost:8004, http://localhost:8005, http://localhost:8006, http://localhost:8007, http://localhost:8008, http://localhost:8009, https://3000.code-app-tezosbase.w3d.run/, https://3000.code-app-tezosbase.w3d.run'
+      image: hasura/graphql-engine:v2.48.0.cli-migrations-v3
+      volumes:
+        - ./hasura/metadata:/hasura-metadata
+      networks:
+        - v3-homebase-indexer
     db:
-      container_name: hb-indexer-postgres
-      ports:
-          - '0.0.0.0:5432:5432'
       environment:
           - POSTGRES_USER=indexer
           - POSTGRES_PASSWORD=qwerty
           - POSTGRES_DB=indexer_db
       image: postgres
+      networks:
+        - v3-homebase-indexer
+      volumes:
+        - v3_indexer_db:/var/lib/postgresql/data
+
     indexer:
       build: .
       depends_on:
         - db
+      labels:
+        - "com.axiom.collect=true"
       command: ["-c", "dipdup.yml", "run"]
       environment:
         - PG_HOST=db
@@ -36,5 +67,17 @@ services:
         - PG_PASSWORD=qwerty
         - PG_DB=indexer_db
         - PG_SCHEMA=public
-      ports:
-        - 0.0.0.0:9000:9000
+        - SENTRY_DSN=${SENTRY_DSN}
+        - SENTRY_ENVIRONMENT=${SENTRY_ENV:-development}
+      networks:
+        - v3-homebase-indexer
+
+volumes:
+  v3_indexer_db:
+    driver: local
+  vector-data:
+    driver: local 
+
+networks:
+  v3-homebase-indexer:
+    driver: bridge

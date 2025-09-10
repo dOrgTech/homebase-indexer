@@ -1,0 +1,9 @@
+table:
+  name: dipdup_token_metadata
+  schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true

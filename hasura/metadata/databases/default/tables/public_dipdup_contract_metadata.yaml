@@ -1,0 +1,9 @@
+table:
+  name: dipdup_contract_metadata
+  schema: public
+select_permissions:
+- role: indexer
+  permission:
+    columns: '*'
+    filter: {}
+    allow_aggregations: true
