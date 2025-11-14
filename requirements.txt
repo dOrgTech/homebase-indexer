@@ -16,7 +16,6 @@ chardet==4.0.0
 charset-normalizer==2.0.12
 click==8.1.2
 datamodel-code-generator==0.13.1
-dipdup==6.1.2
 dnspython==2.2.1
 email-validator==1.2.0
 fcache==0.4.7
@@ -50,6 +49,7 @@ python-dotenv==0.19.2
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
 PyYAML==6.0
+httpx==0.26.0
 requests==2.27.1
 ruamel.yaml==0.17.21
 ruamel.yaml.clib==0.2.6

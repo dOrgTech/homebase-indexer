@@ -1,7 +1,13 @@
-FROM dipdup/dipdup:6.1.2
+FROM dipdup/dipdup:7
 
-COPY requirements.txt .
+WORKDIR /app
 
-RUN pip3 install -r requirements.txt
+COPY --chown=dipdup:dipdup . /app
 
-COPY . .
+USER root
+RUN mkdir -p /app/registrydao/abi && \
+    chown -R dipdup:dipdup /app && \
+    pip install httpx && \
+    python /app/fix_reward_field.py
+
+USER dipdup

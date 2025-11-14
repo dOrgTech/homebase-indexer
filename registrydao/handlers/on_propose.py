@@ -2,7 +2,7 @@ from registrydao.utils.ledger import update_ledger
 from typing import Optional
 from datetime import datetime
 
-from dipdup.models import OperationData, Origination, Transaction
+from dipdup.models.tezos_tzkt import TzktTransaction as Transaction
 from dipdup.context import HandlerContext
 
 import registrydao.models as models
@@ -18,12 +18,7 @@ async def on_propose(
     try:
         dao_address = propose.data.target_address
         print("dao_address: " + dao_address)
-        diffs = propose.data.diffs or []
-        proposals_content = next((d["content"] for d in diffs if d.get("path") == "proposals" and "content" in d), None)
-        if not proposals_content:
-            print("on_propose: proposals diff not found; skipping", dao_address)
-            return
-        proposal_diff = proposals_content
+        proposal_diff = propose.data.diffs[0]['content']
 
         await update_ledger(dao_address, propose.data.diffs)
 

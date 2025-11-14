@@ -1,0 +1,295 @@
+# Historical DAO indexes (generated)
+  registry_dao_KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw:
+    template: registry_dao
+    first_level: 3023535
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1EfitTAsPQJ9ZwSZgtpeyS14JE5V2fDQhX:
+    template: registry_dao
+    first_level: 3023615
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1BBt31T7s3p2awgn6aEELUXJWnxdrhRvYZ:
+    template: registry_dao
+    first_level: 3031855
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1PY9PXm8NMAgSEZg7bUtFjmV2Sj64bKuVV:
+    template: registry_dao
+    first_level: 3077906
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1VA5SvdE9AU41GY4u7ik5WkTi1pMU4PiTz:
+    template: registry_dao
+    first_level: 3296801
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1LyPqdRVBFdQvhjyybG5osRCXnGSrk15M5:
+    template: registry_dao
+    first_level: 3401707
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1GLJWdrtPuyqcbREBjvQCtwKicbvgrjqyv:
+    template: registry_dao
+    first_level: 3481866
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT18vnVgseKpLBZG5Q3oVYh46rBE2PceBdD3:
+    template: registry_dao
+    first_level: 3581859
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1Pe6jMadqzrGmkJA1ajEzjyV7fcxQeVqrd:
+    template: registry_dao
+    first_level: 3629869
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1WCTd66LsF5Bs2ueJan3ydVmK1E6o5Kfmm:
+    template: registry_dao
+    first_level: 3702765
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1WRzfCxCyJMdU5a6XbhLoQXJT7kJg4sbDa:
+    template: registry_dao
+    first_level: 3713707
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1FNJb3Fhp7K67HDbm5wU1o5r4CQTEYc6wq:
+    template: registry_dao
+    first_level: 3713754
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1WFnBYg9iGqQA5nF6goE6xwsH5cPfD8qsK:
+    template: registry_dao
+    first_level: 3744814
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1Vp3G8U73TMATEtyy47q8hpyJKdWJwKWf4:
+    template: registry_dao
+    first_level: 3746530
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1WoD3XvmSeWM1M3NfJuXF3E3pX895y9nB2:
+    template: registry_dao
+    first_level: 3747313
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1JGRv3za1ZrVAsH2Rv2dCzVjZLY1oer5pS:
+    template: registry_dao
+    first_level: 3747667
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1DvaTxPQ392hdaeCGzBJb9pmDohvZPZYEd:
+    template: registry_dao
+    first_level: 3751903
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT19bHYtTdgRLqf1Xw4xMcMg8DdyRVoqMMsd:
+    template: registry_dao
+    first_level: 3799016
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1ARm3Utdh122aAadBgM3UqwV8rWxu8d5tu:
+    template: registry_dao
+    first_level: 3823861
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1PAB2DZu1xe4GKJhACrbxLtWp9vJa2mEh1:
+    template: registry_dao
+    first_level: 3915097
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1PmvK7cYXYZwU5crbeubZ5RJ2jbnAFc78x:
+    template: registry_dao
+    first_level: 3915675
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1WMrDj1o5u2ArNcZ5YidgoQbtyDm7izzKb:
+    template: registry_dao
+    first_level: 3919148
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1XuUtnww729wf25TySR5aaCpJbJYbERBJ3:
+    template: registry_dao
+    first_level: 4247454
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT19kU4HrmqmfPUwyQEDeExvhXZWiLa4vRkd:
+    template: registry_dao
+    first_level: 4265778
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1AEMX1S2izibxfUuzC4KRjpcMLBh9Z7tpt:
+    template: registry_dao
+    first_level: 4288926
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1LmQAB73LvEEX1e9y2LTT7GytF582YAEbG:
+    template: registry_dao
+    first_level: 4389485
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1Ft4FyY8GGFYbAtxSX9mKNuSyQYRQSYfCe:
+    template: registry_dao
+    first_level: 4746267
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1FW1iJnqygzje2EmsGwtMb6kMUGHkYbNqQ:
+    template: registry_dao
+    first_level: 4784196
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1UnB5tDtGQD153FUGPyxTkqVhyWvEdTyzc:
+    template: registry_dao
+    first_level: 4826440
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1XduPL2NXnoHfybQde4zjx21cTNtvEpqsW:
+    template: registry_dao
+    first_level: 4837055
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1JXFgQKbZNjHBKnBM9Wqh6dHZvDqhgVidV:
+    template: registry_dao
+    first_level: 5300966
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1X4PoAo1vs1BKeVdzCgPmTJtkoajqd8Rw2:
+    template: registry_dao
+    first_level: 5513216
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1S31ZgfKbw2KYpJDJh7995achV2f3QYBii:
+    template: registry_dao
+    first_level: 8269383
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1CVjSStYHCzpS2jLx3WfdW9HYGdULXS6pa:
+    template: registry_dao
+    first_level: 8375902
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1QRc7nPhXPVfzZ1Fb33PAcvnjJyXya2Tty:
+    template: registry_dao
+    first_level: 8818734
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1MH4CJWShYNq53iF6f17FbGH2Pe7qAwHMn:
+    template: registry_dao
+    first_level: 8818858
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT19z15TSs96csjGTYw9LSREBW5deKQ1DsuH:
+    template: registry_dao
+    first_level: 10161479
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1KTD921iByx3289MJ1UjxL6q13evyxSyS3:
+    template: registry_dao
+    first_level: 10168028
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1A85E2sXPm9jaPmHKMMgFoqG2j9bsDCEWE:
+    template: registry_dao
+    first_level: 10168351
+    values:
+      contract: registry_mainnet
+      datasource: tzkt_mainnet
+  registry_dao_KT1HGMjZKCmpmMnzJtTRmbTXL3431p4ctGNL:
+    template: registry_dao
+    first_level: 8916131
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1JnyZ2ZHDaKuTWoWYnsd5bCgWiVciTiZJ6:
+    template: registry_dao
+    first_level: 9915510
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1MSnnvjW933eS36LajZHPhi4yDso8niQNb:
+    template: registry_dao
+    first_level: 11405701
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1CmsxfDWUxajxuSu9dNDuVyXbv2YivfVRg:
+    template: registry_dao
+    first_level: 11421723
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1UAbhdSRrCEtDrQamAXrqqmjiKvoBfc8Z2:
+    template: registry_dao
+    first_level: 11551102
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1FpSKQY1JaAqY1u14XtEkRLhiznSzkcYQf:
+    template: registry_dao
+    first_level: 11551970
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1RSLZ7rJpKYxiqXuqq1e5Sud3MmR1wFcAV:
+    template: registry_dao
+    first_level: 11780472
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1WDqWaQyS94D7sT64YVgZcTETnnLMwUxwT:
+    template: registry_dao
+    first_level: 12271853
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT18zWGQ1NHJQPwXYrmX9EegFSV4xFoYncAs:
+    template: registry_dao
+    first_level: 14895120
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet
+  registry_dao_KT1JunEYyN3eauqUSyo6hRTB3xq4rf64KiWh:
+    template: registry_dao
+    first_level: 14896594
+    values:
+      contract: registry_ghostnet
+      datasource: tzkt_ghostnet

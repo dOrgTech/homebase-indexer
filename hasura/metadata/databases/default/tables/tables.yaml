@@ -19,3 +19,5 @@
 - "!include public_dipdup_model_update.yaml"
 - "!include public_dipdup_schema.yaml"
 - "!include public_dipdup_token_metadata.yaml"
+- "!include public_dipdup_meta.yaml"
+- "!include public_dipdup_metadata.yaml"

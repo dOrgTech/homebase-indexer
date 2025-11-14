@@ -1,0 +1,16 @@
+table:
+  name: dipdup_meta
+  schema: public
+object_relationships: []
+array_relationships: []
+select_permissions:
+  - role: indexer
+    permission:
+      columns:
+        - key
+        - value
+      filter: {}
+insert_permissions: []
+update_permissions: []
+delete_permissions: []
+

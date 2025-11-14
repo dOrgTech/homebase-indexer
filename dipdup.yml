@@ -1,16 +1,17 @@
-spec_version: 1.2
+spec_version: 2.0
 package: registrydao
-
 database:
   kind: postgres
-  url: !env DATABASE_URL
-  schema_name: ${PG_SCHEMA:-changeme}
-
+  host: ${PG_HOST:-db}
+  port: ${PG_PORT:-5432}
+  user: ${PG_USER:-indexer}
+  password: ${PG_PASSWORD:-qwerty}
+  database: ${PG_DB:-indexer_db}
+  schema_name: ${PG_SCHEMA:-public}
 sentry:
   dsn: ${SENTRY_DSN}
   environment: prod
-  debug: True
-
+  debug: true
 advanced:
   reindex:
     manual: wipe
@@ -18,165 +19,644 @@ advanced:
     rollback: wipe
     config_modified: wipe
     schema_modified: wipe
-
 contracts:
   registry_mainnet:
+    kind: tezos
     address: KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw
     typename: registry
   registry_ghostnet:
+    kind: tezos
     address: KT1QZtF8vVUvZYRxttRwgftc4EaQHZWgzXNp
     typename: registry
-
+  KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw:
+    kind: tezos
+    address: KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw
+    typename: registry
+  KT1EfitTAsPQJ9ZwSZgtpeyS14JE5V2fDQhX:
+    kind: tezos
+    address: KT1EfitTAsPQJ9ZwSZgtpeyS14JE5V2fDQhX
+    typename: registry
+  KT1BBt31T7s3p2awgn6aEELUXJWnxdrhRvYZ:
+    kind: tezos
+    address: KT1BBt31T7s3p2awgn6aEELUXJWnxdrhRvYZ
+    typename: registry
+  KT1PY9PXm8NMAgSEZg7bUtFjmV2Sj64bKuVV:
+    kind: tezos
+    address: KT1PY9PXm8NMAgSEZg7bUtFjmV2Sj64bKuVV
+    typename: registry
+  KT1VA5SvdE9AU41GY4u7ik5WkTi1pMU4PiTz:
+    kind: tezos
+    address: KT1VA5SvdE9AU41GY4u7ik5WkTi1pMU4PiTz
+    typename: registry
+  KT1LyPqdRVBFdQvhjyybG5osRCXnGSrk15M5:
+    kind: tezos
+    address: KT1LyPqdRVBFdQvhjyybG5osRCXnGSrk15M5
+    typename: registry
+  KT1GLJWdrtPuyqcbREBjvQCtwKicbvgrjqyv:
+    kind: tezos
+    address: KT1GLJWdrtPuyqcbREBjvQCtwKicbvgrjqyv
+    typename: registry
+  KT18vnVgseKpLBZG5Q3oVYh46rBE2PceBdD3:
+    kind: tezos
+    address: KT18vnVgseKpLBZG5Q3oVYh46rBE2PceBdD3
+    typename: registry
+  KT1Pe6jMadqzrGmkJA1ajEzjyV7fcxQeVqrd:
+    kind: tezos
+    address: KT1Pe6jMadqzrGmkJA1ajEzjyV7fcxQeVqrd
+    typename: registry
+  KT1WCTd66LsF5Bs2ueJan3ydVmK1E6o5Kfmm:
+    kind: tezos
+    address: KT1WCTd66LsF5Bs2ueJan3ydVmK1E6o5Kfmm
+    typename: registry
+  KT1WRzfCxCyJMdU5a6XbhLoQXJT7kJg4sbDa:
+    kind: tezos
+    address: KT1WRzfCxCyJMdU5a6XbhLoQXJT7kJg4sbDa
+    typename: registry
+  KT1FNJb3Fhp7K67HDbm5wU1o5r4CQTEYc6wq:
+    kind: tezos
+    address: KT1FNJb3Fhp7K67HDbm5wU1o5r4CQTEYc6wq
+    typename: registry
+  KT1WFnBYg9iGqQA5nF6goE6xwsH5cPfD8qsK:
+    kind: tezos
+    address: KT1WFnBYg9iGqQA5nF6goE6xwsH5cPfD8qsK
+    typename: registry
+  KT1Vp3G8U73TMATEtyy47q8hpyJKdWJwKWf4:
+    kind: tezos
+    address: KT1Vp3G8U73TMATEtyy47q8hpyJKdWJwKWf4
+    typename: registry
+  KT1WoD3XvmSeWM1M3NfJuXF3E3pX895y9nB2:
+    kind: tezos
+    address: KT1WoD3XvmSeWM1M3NfJuXF3E3pX895y9nB2
+    typename: registry
+  KT1JGRv3za1ZrVAsH2Rv2dCzVjZLY1oer5pS:
+    kind: tezos
+    address: KT1JGRv3za1ZrVAsH2Rv2dCzVjZLY1oer5pS
+    typename: registry
+  KT1DvaTxPQ392hdaeCGzBJb9pmDohvZPZYEd:
+    kind: tezos
+    address: KT1DvaTxPQ392hdaeCGzBJb9pmDohvZPZYEd
+    typename: registry
+  KT19bHYtTdgRLqf1Xw4xMcMg8DdyRVoqMMsd:
+    kind: tezos
+    address: KT19bHYtTdgRLqf1Xw4xMcMg8DdyRVoqMMsd
+    typename: registry
+  KT1ARm3Utdh122aAadBgM3UqwV8rWxu8d5tu:
+    kind: tezos
+    address: KT1ARm3Utdh122aAadBgM3UqwV8rWxu8d5tu
+    typename: registry
+  KT1PAB2DZu1xe4GKJhACrbxLtWp9vJa2mEh1:
+    kind: tezos
+    address: KT1PAB2DZu1xe4GKJhACrbxLtWp9vJa2mEh1
+    typename: registry
+  KT1PmvK7cYXYZwU5crbeubZ5RJ2jbnAFc78x:
+    kind: tezos
+    address: KT1PmvK7cYXYZwU5crbeubZ5RJ2jbnAFc78x
+    typename: registry
+  KT1WMrDj1o5u2ArNcZ5YidgoQbtyDm7izzKb:
+    kind: tezos
+    address: KT1WMrDj1o5u2ArNcZ5YidgoQbtyDm7izzKb
+    typename: registry
+  KT1XuUtnww729wf25TySR5aaCpJbJYbERBJ3:
+    kind: tezos
+    address: KT1XuUtnww729wf25TySR5aaCpJbJYbERBJ3
+    typename: registry
+  KT19kU4HrmqmfPUwyQEDeExvhXZWiLa4vRkd:
+    kind: tezos
+    address: KT19kU4HrmqmfPUwyQEDeExvhXZWiLa4vRkd
+    typename: registry
+  KT1AEMX1S2izibxfUuzC4KRjpcMLBh9Z7tpt:
+    kind: tezos
+    address: KT1AEMX1S2izibxfUuzC4KRjpcMLBh9Z7tpt
+    typename: registry
+  KT1LmQAB73LvEEX1e9y2LTT7GytF582YAEbG:
+    kind: tezos
+    address: KT1LmQAB73LvEEX1e9y2LTT7GytF582YAEbG
+    typename: registry
+  KT1Ft4FyY8GGFYbAtxSX9mKNuSyQYRQSYfCe:
+    kind: tezos
+    address: KT1Ft4FyY8GGFYbAtxSX9mKNuSyQYRQSYfCe
+    typename: registry
+  KT1FW1iJnqygzje2EmsGwtMb6kMUGHkYbNqQ:
+    kind: tezos
+    address: KT1FW1iJnqygzje2EmsGwtMb6kMUGHkYbNqQ
+    typename: registry
+  KT1UnB5tDtGQD153FUGPyxTkqVhyWvEdTyzc:
+    kind: tezos
+    address: KT1UnB5tDtGQD153FUGPyxTkqVhyWvEdTyzc
+    typename: registry
+  KT1XduPL2NXnoHfybQde4zjx21cTNtvEpqsW:
+    kind: tezos
+    address: KT1XduPL2NXnoHfybQde4zjx21cTNtvEpqsW
+    typename: registry
+  KT1JXFgQKbZNjHBKnBM9Wqh6dHZvDqhgVidV:
+    kind: tezos
+    address: KT1JXFgQKbZNjHBKnBM9Wqh6dHZvDqhgVidV
+    typename: registry
+  KT1X4PoAo1vs1BKeVdzCgPmTJtkoajqd8Rw2:
+    kind: tezos
+    address: KT1X4PoAo1vs1BKeVdzCgPmTJtkoajqd8Rw2
+    typename: registry
+  KT1S31ZgfKbw2KYpJDJh7995achV2f3QYBii:
+    kind: tezos
+    address: KT1S31ZgfKbw2KYpJDJh7995achV2f3QYBii
+    typename: registry
+  KT1CVjSStYHCzpS2jLx3WfdW9HYGdULXS6pa:
+    kind: tezos
+    address: KT1CVjSStYHCzpS2jLx3WfdW9HYGdULXS6pa
+    typename: registry
+  KT1QRc7nPhXPVfzZ1Fb33PAcvnjJyXya2Tty:
+    kind: tezos
+    address: KT1QRc7nPhXPVfzZ1Fb33PAcvnjJyXya2Tty
+    typename: registry
+  KT1MH4CJWShYNq53iF6f17FbGH2Pe7qAwHMn:
+    kind: tezos
+    address: KT1MH4CJWShYNq53iF6f17FbGH2Pe7qAwHMn
+    typename: registry
+  KT19z15TSs96csjGTYw9LSREBW5deKQ1DsuH:
+    kind: tezos
+    address: KT19z15TSs96csjGTYw9LSREBW5deKQ1DsuH
+    typename: registry
+  KT1KTD921iByx3289MJ1UjxL6q13evyxSyS3:
+    kind: tezos
+    address: KT1KTD921iByx3289MJ1UjxL6q13evyxSyS3
+    typename: registry
+  KT1A85E2sXPm9jaPmHKMMgFoqG2j9bsDCEWE:
+    kind: tezos
+    address: KT1A85E2sXPm9jaPmHKMMgFoqG2j9bsDCEWE
+    typename: registry
+  KT1HGMjZKCmpmMnzJtTRmbTXL3431p4ctGNL:
+    kind: tezos
+    address: KT1HGMjZKCmpmMnzJtTRmbTXL3431p4ctGNL
+    typename: registry
+  KT1JnyZ2ZHDaKuTWoWYnsd5bCgWiVciTiZJ6:
+    kind: tezos
+    address: KT1JnyZ2ZHDaKuTWoWYnsd5bCgWiVciTiZJ6
+    typename: registry
+  KT1MSnnvjW933eS36LajZHPhi4yDso8niQNb:
+    kind: tezos
+    address: KT1MSnnvjW933eS36LajZHPhi4yDso8niQNb
+    typename: registry
+  KT1CmsxfDWUxajxuSu9dNDuVyXbv2YivfVRg:
+    kind: tezos
+    address: KT1CmsxfDWUxajxuSu9dNDuVyXbv2YivfVRg
+    typename: registry
+  KT1UAbhdSRrCEtDrQamAXrqqmjiKvoBfc8Z2:
+    kind: tezos
+    address: KT1UAbhdSRrCEtDrQamAXrqqmjiKvoBfc8Z2
+    typename: registry
+  KT1FpSKQY1JaAqY1u14XtEkRLhiznSzkcYQf:
+    kind: tezos
+    address: KT1FpSKQY1JaAqY1u14XtEkRLhiznSzkcYQf
+    typename: registry
+  KT1RSLZ7rJpKYxiqXuqq1e5Sud3MmR1wFcAV:
+    kind: tezos
+    address: KT1RSLZ7rJpKYxiqXuqq1e5Sud3MmR1wFcAV
+    typename: registry
+  KT1WDqWaQyS94D7sT64YVgZcTETnnLMwUxwT:
+    kind: tezos
+    address: KT1WDqWaQyS94D7sT64YVgZcTETnnLMwUxwT
+    typename: registry
+  KT18zWGQ1NHJQPwXYrmX9EegFSV4xFoYncAs:
+    kind: tezos
+    address: KT18zWGQ1NHJQPwXYrmX9EegFSV4xFoYncAs
+    typename: registry
+  KT1JunEYyN3eauqUSyo6hRTB3xq4rf64KiWh:
+    kind: tezos
+    address: KT1JunEYyN3eauqUSyo6hRTB3xq4rf64KiWh
+    typename: registry
 datasources:
   tzkt_mainnet:
-    kind: tzkt
-    url: http://tzkt-mainnet
-
+    kind: tezos.tzkt
+    url: https://api.mainnet.tzkt.io
   tzkt_ghostnet:
-    kind: tzkt
-    url: http://tzkt-ghostnet
-
+    kind: tezos.tzkt
+    url: https://api.ghostnet.tzkt.io
 templates:
   registry_dao:
-    kind: operation
+    kind: tezos.tzkt.operations
     datasource: <datasource>
     types:
-      - transaction
-      - origination
+    - transaction
+    - origination
     contracts:
-      - <contract>
+    - <contract>
     handlers:
-      - callback: on_origination
-        pattern:
-          - type: origination
-            originated_contract: <contract>
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: propose
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: flush
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: unstake_vote
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: unfreeze
-
+    - callback: on_origination
+      pattern:
+      - type: origination
+        originated_contract: <contract>
+    - callback: on_propose
+      pattern:
+      - destination: <contract>
+        entrypoint: propose
+    - callback: on_flush
+      pattern:
+      - destination: <contract>
+        entrypoint: flush
+    - callback: on_vote
+      pattern:
+      - destination: <contract>
+        entrypoint: vote
+    - callback: on_drop_proposal
+      pattern:
+      - destination: <contract>
+        entrypoint: drop_proposal
+    - callback: on_unstake_vote
+      pattern:
+      - destination: <contract>
+        entrypoint: unstake_vote
+    - callback: on_freeze
+      pattern:
+      - destination: <contract>
+        entrypoint: freeze
+    - callback: on_unfreeze
+      pattern:
+      - destination: <contract>
+        entrypoint: unfreeze
 indexes:
+  registry_dao_KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw:
+    template: registry_dao
+    first_level: 3023534
+    values:
+      contract: KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw
+      datasource: tzkt_mainnet
+  registry_dao_KT1EfitTAsPQJ9ZwSZgtpeyS14JE5V2fDQhX:
+    template: registry_dao
+    first_level: 3023614
+    values:
+      contract: KT1EfitTAsPQJ9ZwSZgtpeyS14JE5V2fDQhX
+      datasource: tzkt_mainnet
+  registry_dao_KT1BBt31T7s3p2awgn6aEELUXJWnxdrhRvYZ:
+    template: registry_dao
+    first_level: 3031854
+    values:
+      contract: KT1BBt31T7s3p2awgn6aEELUXJWnxdrhRvYZ
+      datasource: tzkt_mainnet
+  registry_dao_KT1PY9PXm8NMAgSEZg7bUtFjmV2Sj64bKuVV:
+    template: registry_dao
+    first_level: 3077905
+    values:
+      contract: KT1PY9PXm8NMAgSEZg7bUtFjmV2Sj64bKuVV
+      datasource: tzkt_mainnet
+  registry_dao_KT1VA5SvdE9AU41GY4u7ik5WkTi1pMU4PiTz:
+    template: registry_dao
+    first_level: 3296800
+    values:
+      contract: KT1VA5SvdE9AU41GY4u7ik5WkTi1pMU4PiTz
+      datasource: tzkt_mainnet
+  registry_dao_KT1LyPqdRVBFdQvhjyybG5osRCXnGSrk15M5:
+    template: registry_dao
+    first_level: 3401706
+    values:
+      contract: KT1LyPqdRVBFdQvhjyybG5osRCXnGSrk15M5
+      datasource: tzkt_mainnet
+  registry_dao_KT1GLJWdrtPuyqcbREBjvQCtwKicbvgrjqyv:
+    template: registry_dao
+    first_level: 3481865
+    values:
+      contract: KT1GLJWdrtPuyqcbREBjvQCtwKicbvgrjqyv
+      datasource: tzkt_mainnet
+  registry_dao_KT18vnVgseKpLBZG5Q3oVYh46rBE2PceBdD3:
+    template: registry_dao
+    first_level: 3581858
+    values:
+      contract: KT18vnVgseKpLBZG5Q3oVYh46rBE2PceBdD3
+      datasource: tzkt_mainnet
+  registry_dao_KT1Pe6jMadqzrGmkJA1ajEzjyV7fcxQeVqrd:
+    template: registry_dao
+    first_level: 3629868
+    values:
+      contract: KT1Pe6jMadqzrGmkJA1ajEzjyV7fcxQeVqrd
+      datasource: tzkt_mainnet
+  registry_dao_KT1WCTd66LsF5Bs2ueJan3ydVmK1E6o5Kfmm:
+    template: registry_dao
+    first_level: 3702764
+    values:
+      contract: KT1WCTd66LsF5Bs2ueJan3ydVmK1E6o5Kfmm
+      datasource: tzkt_mainnet
+  registry_dao_KT1WRzfCxCyJMdU5a6XbhLoQXJT7kJg4sbDa:
+    template: registry_dao
+    first_level: 3713706
+    values:
+      contract: KT1WRzfCxCyJMdU5a6XbhLoQXJT7kJg4sbDa
+      datasource: tzkt_mainnet
+  registry_dao_KT1FNJb3Fhp7K67HDbm5wU1o5r4CQTEYc6wq:
+    template: registry_dao
+    first_level: 3713753
+    values:
+      contract: KT1FNJb3Fhp7K67HDbm5wU1o5r4CQTEYc6wq
+      datasource: tzkt_mainnet
+  registry_dao_KT1WFnBYg9iGqQA5nF6goE6xwsH5cPfD8qsK:
+    template: registry_dao
+    first_level: 3744813
+    values:
+      contract: KT1WFnBYg9iGqQA5nF6goE6xwsH5cPfD8qsK
+      datasource: tzkt_mainnet
+  registry_dao_KT1Vp3G8U73TMATEtyy47q8hpyJKdWJwKWf4:
+    template: registry_dao
+    first_level: 3746529
+    values:
+      contract: KT1Vp3G8U73TMATEtyy47q8hpyJKdWJwKWf4
+      datasource: tzkt_mainnet
+  registry_dao_KT1WoD3XvmSeWM1M3NfJuXF3E3pX895y9nB2:
+    template: registry_dao
+    first_level: 3747312
+    values:
+      contract: KT1WoD3XvmSeWM1M3NfJuXF3E3pX895y9nB2
+      datasource: tzkt_mainnet
+  registry_dao_KT1JGRv3za1ZrVAsH2Rv2dCzVjZLY1oer5pS:
+    template: registry_dao
+    first_level: 3747666
+    values:
+      contract: KT1JGRv3za1ZrVAsH2Rv2dCzVjZLY1oer5pS
+      datasource: tzkt_mainnet
+  registry_dao_KT1DvaTxPQ392hdaeCGzBJb9pmDohvZPZYEd:
+    template: registry_dao
+    first_level: 3751902
+    values:
+      contract: KT1DvaTxPQ392hdaeCGzBJb9pmDohvZPZYEd
+      datasource: tzkt_mainnet
+  registry_dao_KT19bHYtTdgRLqf1Xw4xMcMg8DdyRVoqMMsd:
+    template: registry_dao
+    first_level: 3799015
+    values:
+      contract: KT19bHYtTdgRLqf1Xw4xMcMg8DdyRVoqMMsd
+      datasource: tzkt_mainnet
+  registry_dao_KT1ARm3Utdh122aAadBgM3UqwV8rWxu8d5tu:
+    template: registry_dao
+    first_level: 3823860
+    values:
+      contract: KT1ARm3Utdh122aAadBgM3UqwV8rWxu8d5tu
+      datasource: tzkt_mainnet
+  registry_dao_KT1PAB2DZu1xe4GKJhACrbxLtWp9vJa2mEh1:
+    template: registry_dao
+    first_level: 3915096
+    values:
+      contract: KT1PAB2DZu1xe4GKJhACrbxLtWp9vJa2mEh1
+      datasource: tzkt_mainnet
+  registry_dao_KT1PmvK7cYXYZwU5crbeubZ5RJ2jbnAFc78x:
+    template: registry_dao
+    first_level: 3915674
+    values:
+      contract: KT1PmvK7cYXYZwU5crbeubZ5RJ2jbnAFc78x
+      datasource: tzkt_mainnet
+  registry_dao_KT1WMrDj1o5u2ArNcZ5YidgoQbtyDm7izzKb:
+    template: registry_dao
+    first_level: 3919147
+    values:
+      contract: KT1WMrDj1o5u2ArNcZ5YidgoQbtyDm7izzKb
+      datasource: tzkt_mainnet
+  registry_dao_KT1XuUtnww729wf25TySR5aaCpJbJYbERBJ3:
+    template: registry_dao
+    first_level: 4247453
+    values:
+      contract: KT1XuUtnww729wf25TySR5aaCpJbJYbERBJ3
+      datasource: tzkt_mainnet
+  registry_dao_KT19kU4HrmqmfPUwyQEDeExvhXZWiLa4vRkd:
+    template: registry_dao
+    first_level: 4265777
+    values:
+      contract: KT19kU4HrmqmfPUwyQEDeExvhXZWiLa4vRkd
+      datasource: tzkt_mainnet
+  registry_dao_KT1AEMX1S2izibxfUuzC4KRjpcMLBh9Z7tpt:
+    template: registry_dao
+    first_level: 4288925
+    values:
+      contract: KT1AEMX1S2izibxfUuzC4KRjpcMLBh9Z7tpt
+      datasource: tzkt_mainnet
+  registry_dao_KT1LmQAB73LvEEX1e9y2LTT7GytF582YAEbG:
+    template: registry_dao
+    first_level: 4389484
+    values:
+      contract: KT1LmQAB73LvEEX1e9y2LTT7GytF582YAEbG
+      datasource: tzkt_mainnet
+  registry_dao_KT1Ft4FyY8GGFYbAtxSX9mKNuSyQYRQSYfCe:
+    template: registry_dao
+    first_level: 4746266
+    values:
+      contract: KT1Ft4FyY8GGFYbAtxSX9mKNuSyQYRQSYfCe
+      datasource: tzkt_mainnet
+  registry_dao_KT1FW1iJnqygzje2EmsGwtMb6kMUGHkYbNqQ:
+    template: registry_dao
+    first_level: 4784195
+    values:
+      contract: KT1FW1iJnqygzje2EmsGwtMb6kMUGHkYbNqQ
+      datasource: tzkt_mainnet
+  registry_dao_KT1UnB5tDtGQD153FUGPyxTkqVhyWvEdTyzc:
+    template: registry_dao
+    first_level: 4826439
+    values:
+      contract: KT1UnB5tDtGQD153FUGPyxTkqVhyWvEdTyzc
+      datasource: tzkt_mainnet
+  registry_dao_KT1XduPL2NXnoHfybQde4zjx21cTNtvEpqsW:
+    template: registry_dao
+    first_level: 4837054
+    values:
+      contract: KT1XduPL2NXnoHfybQde4zjx21cTNtvEpqsW
+      datasource: tzkt_mainnet
+  registry_dao_KT1JXFgQKbZNjHBKnBM9Wqh6dHZvDqhgVidV:
+    template: registry_dao
+    first_level: 5300965
+    values:
+      contract: KT1JXFgQKbZNjHBKnBM9Wqh6dHZvDqhgVidV
+      datasource: tzkt_mainnet
+  registry_dao_KT1X4PoAo1vs1BKeVdzCgPmTJtkoajqd8Rw2:
+    template: registry_dao
+    first_level: 5513215
+    values:
+      contract: KT1X4PoAo1vs1BKeVdzCgPmTJtkoajqd8Rw2
+      datasource: tzkt_mainnet
+  registry_dao_KT1S31ZgfKbw2KYpJDJh7995achV2f3QYBii:
+    template: registry_dao
+    first_level: 8269382
+    values:
+      contract: KT1S31ZgfKbw2KYpJDJh7995achV2f3QYBii
+      datasource: tzkt_mainnet
+  registry_dao_KT1CVjSStYHCzpS2jLx3WfdW9HYGdULXS6pa:
+    template: registry_dao
+    first_level: 8375901
+    values:
+      contract: KT1CVjSStYHCzpS2jLx3WfdW9HYGdULXS6pa
+      datasource: tzkt_mainnet
+  registry_dao_KT1QRc7nPhXPVfzZ1Fb33PAcvnjJyXya2Tty:
+    template: registry_dao
+    first_level: 8818733
+    values:
+      contract: KT1QRc7nPhXPVfzZ1Fb33PAcvnjJyXya2Tty
+      datasource: tzkt_mainnet
+  registry_dao_KT1MH4CJWShYNq53iF6f17FbGH2Pe7qAwHMn:
+    template: registry_dao
+    first_level: 8818857
+    values:
+      contract: KT1MH4CJWShYNq53iF6f17FbGH2Pe7qAwHMn
+      datasource: tzkt_mainnet
+  registry_dao_KT19z15TSs96csjGTYw9LSREBW5deKQ1DsuH:
+    template: registry_dao
+    first_level: 10161478
+    values:
+      contract: KT19z15TSs96csjGTYw9LSREBW5deKQ1DsuH
+      datasource: tzkt_mainnet
+  registry_dao_KT1KTD921iByx3289MJ1UjxL6q13evyxSyS3:
+    template: registry_dao
+    first_level: 10168027
+    values:
+      contract: KT1KTD921iByx3289MJ1UjxL6q13evyxSyS3
+      datasource: tzkt_mainnet
+  registry_dao_KT1A85E2sXPm9jaPmHKMMgFoqG2j9bsDCEWE:
+    template: registry_dao
+    first_level: 10168350
+    values:
+      contract: KT1A85E2sXPm9jaPmHKMMgFoqG2j9bsDCEWE
+      datasource: tzkt_mainnet
+  registry_dao_KT1HGMjZKCmpmMnzJtTRmbTXL3431p4ctGNL:
+    template: registry_dao
+    first_level: 8916130
+    values:
+      contract: KT1HGMjZKCmpmMnzJtTRmbTXL3431p4ctGNL
+      datasource: tzkt_ghostnet
+  registry_dao_KT1JnyZ2ZHDaKuTWoWYnsd5bCgWiVciTiZJ6:
+    template: registry_dao
+    first_level: 9915509
+    values:
+      contract: KT1JnyZ2ZHDaKuTWoWYnsd5bCgWiVciTiZJ6
+      datasource: tzkt_ghostnet
+  registry_dao_KT1MSnnvjW933eS36LajZHPhi4yDso8niQNb:
+    template: registry_dao
+    first_level: 11405700
+    values:
+      contract: KT1MSnnvjW933eS36LajZHPhi4yDso8niQNb
+      datasource: tzkt_ghostnet
+  registry_dao_KT1CmsxfDWUxajxuSu9dNDuVyXbv2YivfVRg:
+    template: registry_dao
+    first_level: 11421722
+    values:
+      contract: KT1CmsxfDWUxajxuSu9dNDuVyXbv2YivfVRg
+      datasource: tzkt_ghostnet
+  registry_dao_KT1UAbhdSRrCEtDrQamAXrqqmjiKvoBfc8Z2:
+    template: registry_dao
+    first_level: 11551101
+    values:
+      contract: KT1UAbhdSRrCEtDrQamAXrqqmjiKvoBfc8Z2
+      datasource: tzkt_ghostnet
+  registry_dao_KT1FpSKQY1JaAqY1u14XtEkRLhiznSzkcYQf:
+    template: registry_dao
+    first_level: 11551969
+    values:
+      contract: KT1FpSKQY1JaAqY1u14XtEkRLhiznSzkcYQf
+      datasource: tzkt_ghostnet
+  registry_dao_KT1RSLZ7rJpKYxiqXuqq1e5Sud3MmR1wFcAV:
+    template: registry_dao
+    first_level: 11780471
+    values:
+      contract: KT1RSLZ7rJpKYxiqXuqq1e5Sud3MmR1wFcAV
+      datasource: tzkt_ghostnet
+  registry_dao_KT1WDqWaQyS94D7sT64YVgZcTETnnLMwUxwT:
+    template: registry_dao
+    first_level: 12271852
+    values:
+      contract: KT1WDqWaQyS94D7sT64YVgZcTETnnLMwUxwT
+      datasource: tzkt_ghostnet
+  registry_dao_KT18zWGQ1NHJQPwXYrmX9EegFSV4xFoYncAs:
+    template: registry_dao
+    first_level: 14895119
+    values:
+      contract: KT18zWGQ1NHJQPwXYrmX9EegFSV4xFoYncAs
+      datasource: tzkt_ghostnet
+  registry_dao_KT1JunEYyN3eauqUSyo6hRTB3xq4rf64KiWh:
+    template: registry_dao
+    first_level: 14896593
+    values:
+      contract: KT1JunEYyN3eauqUSyo6hRTB3xq4rf64KiWh
+      datasource: tzkt_ghostnet
   factory_mainnet:
-    kind: operation
+    kind: tezos.tzkt.operations
     datasource: tzkt_mainnet
-    first_level: 30000
+    first_level: 2900000
     types:
-      - origination
+    - transaction
+    - origination
+    contracts:
+    - registry_mainnet
     handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_mainnet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: propose
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: unstake_vote
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: unfreeze
-
+    - callback: on_origination
+      pattern:
+      - type: origination
+        originated_contract: registry_mainnet
+    - callback: on_factory_origination
+      pattern:
+      - type: origination
+        similar_to: registry_mainnet
+    - callback: on_propose
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: propose
+    - callback: on_vote
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: vote
+    - callback: on_drop_proposal
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: drop_proposal
+    - callback: on_unstake_vote
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: unstake_vote
+    - callback: on_flush
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: flush
+    - callback: on_freeze
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: freeze
+    - callback: on_unfreeze
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: unfreeze
   factory_ghostnet:
-    kind: operation
+    kind: tezos.tzkt.operations
     datasource: tzkt_ghostnet
-    first_level: 8916100
+    first_level: 8900000
     types:
-      - origination
+    - transaction
+    - origination
+    contracts:
+    - registry_ghostnet
     handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_ghostnet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: propose
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: unstake_vote
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: unfreeze
+    - callback: on_origination
+      pattern:
+      - type: origination
+        originated_contract: registry_ghostnet
+    - callback: on_factory_origination
+      pattern:
+      - type: origination
+        similar_to: registry_ghostnet
+    - callback: on_propose
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: propose
+    - callback: on_vote
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: vote
+    - callback: on_drop_proposal
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: drop_proposal
+    - callback: on_unstake_vote
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: unstake_vote
+    - callback: on_flush
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: flush
+    - callback: on_freeze
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: freeze
+    - callback: on_unfreeze
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: unfreeze
