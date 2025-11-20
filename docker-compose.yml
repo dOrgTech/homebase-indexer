@@ -12,23 +12,11 @@ services:
         - vector-data:/var/lib/vector
       restart: unless-stopped
 
-
-    tzkt-proxy:
-      image: nginx:1.25-alpine
-      restart: unless-stopped
-      networks: 
-        v3-homebase-indexer:
-          aliases:
-            - tzkt-mainnet
-            - tzkt-ghostnet       
-      volumes:
-        - ./nginx-tzkt.conf:/etc/nginx/conf.d/default.conf:ro
-
     hasura:
       depends_on:
         - db
       ports:
-          - '0.0.0.0:9088:8080'
+          - '0.0.0.0:4010:8080'
       environment:
           - 'HASURA_GRAPHQL_DATABASE_URL=postgres://indexer:qwerty@db:5432/indexer_db'
           - HASURA_GRAPHQL_ENABLE_CONSOLE=true
@@ -47,7 +35,7 @@ services:
           - POSTGRES_USER=indexer
           - POSTGRES_PASSWORD=qwerty
           - POSTGRES_DB=indexer_db
-      image: postgres
+      image: postgres:16
       networks:
         - v3-homebase-indexer
       volumes:

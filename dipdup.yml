@@ -30,11 +30,11 @@ contracts:
 datasources:
   tzkt_mainnet:
     kind: tzkt
-    url: http://tzkt-mainnet
+    url: https://api.tzkt.io
 
   tzkt_ghostnet:
     kind: tzkt
-    url: http://tzkt-ghostnet
+    url: https://api.ghostnet.tzkt.io
 
 templates:
   registry_dao:
