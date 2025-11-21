@@ -1,10 +1,10 @@
 # Homebase Indexer (v3)
 
-Minimal DipDup (v6.1) + Hasura + Postgres indexer for Homebase/RegistryDAO. It indexes on-chain events into Postgres and exposes them via Hasura GraphQL.
+Minimal DipDup (v7.x) + Hasura + Postgres indexer for Homebase/RegistryDAO. It indexes on-chain events into Postgres and exposes them via Hasura GraphQL.
 
 ## Quick Start (Docker)
 - Start services: `docker-compose up -d`
-- Hasura Console: open `http://localhost:9088`
+- Hasura Console: open `http://localhost:9013`
 - Track tables: Hasura → Data → public → Track All tables (Optional) 
 - Logs (indexer): `docker-compose logs -f indexer`
 
@@ -17,7 +17,7 @@ Minimal DipDup (v6.1) + Hasura + Postgres indexer for Homebase/RegistryDAO. It i
 - `registrydao/` Python package (handlers, utils, models, hooks, types, sql)
 - `hasura/` Hasura metadata (optional)
 - `dipdup.yml` DipDup configuration (contracts, datasources, indexes)
-- `docker-compose.yml` Postgres, Hasura (mapped to `http://localhost:9088`), indexer
+- `docker-compose.yml` Postgres, Hasura (mapped to `http://localhost:9013`), indexer
 
 ## Development Notes
 - Format with Black and isort (see `requirements.txt`)
@@ -26,13 +26,8 @@ Minimal DipDup (v6.1) + Hasura + Postgres indexer for Homebase/RegistryDAO. It i
 
 ## Configuration
 - Review `dipdup.yml` before enabling new indexes (check `first_level`, network)
-- Optional: `tzkt-proxy` and `vector` services are included in compose
-
-## TzKT Proxy (1.16 Compatibility)
-- Why: TzKT 1.16 replaces the SignalR events hub (`/v1/events`) with a native WebSocket endpoint (`/v1/ws`). Some clients (including current DipDup usage) still call `/v1/events`.
-- How: The `tzkt-proxy` Nginx service rewrites `/v1/events` and `/v1/events/*` to the new WebSocket path and upgrades the connection, while proxying other `/v1/*` REST calls unchanged.
-- Wiring: In `docker-compose.yml`, the proxy is reachable as `tzkt-mainnet` and `tzkt-ghostnet` (network aliases). `dipdup.yml` points datasources to `http://tzkt-mainnet` and `http://tzkt-ghostnet`, enabling streaming against TzKT 1.16.
-- Config: See `nginx-tzkt.conf`. Adjust upstreams if using a self-hosted TzKT; keep server names consistent with `dipdup.yml`.
+- Optional: `vector` service for log shipping to Axiom is included in compose
+- DipDup 7.x has native WebSocket support for TzKT 1.16+, connecting directly to `https://api.tzkt.io` and `https://api.ghostnet.tzkt.io`
 
 # Deprecation Notices
 

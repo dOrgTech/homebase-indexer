@@ -1,16 +1,17 @@
-spec_version: 1.2
+spec_version: 2.0
 package: registrydao
-
 database:
   kind: postgres
-  url: !env DATABASE_URL
-  schema_name: ${PG_SCHEMA:-changeme}
-
+  host: ${PG_HOST:-db}
+  port: ${PG_PORT:-5432}
+  user: ${PG_USER:-indexer}
+  password: ${PG_PASSWORD:-qwerty}
+  database: ${PG_DB:-indexer_db}
+  schema_name: ${PG_SCHEMA:-public}
 sentry:
   dsn: ${SENTRY_DSN}
   environment: prod
-  debug: True
-
+  debug: true
 advanced:
   reindex:
     manual: wipe
@@ -18,165 +19,154 @@ advanced:
     rollback: wipe
     config_modified: wipe
     schema_modified: wipe
-
 contracts:
   registry_mainnet:
+    kind: tezos
     address: KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw
     typename: registry
   registry_ghostnet:
+    kind: tezos
     address: KT1QZtF8vVUvZYRxttRwgftc4EaQHZWgzXNp
     typename: registry
-
 datasources:
   tzkt_mainnet:
-    kind: tzkt
-    url: http://tzkt-mainnet
-
+    kind: tezos.tzkt
+    url: https://api.mainnet.tzkt.io
   tzkt_ghostnet:
-    kind: tzkt
-    url: http://tzkt-ghostnet
-
+    kind: tezos.tzkt
+    url: https://api.ghostnet.tzkt.io
 templates:
   registry_dao:
-    kind: operation
+    kind: tezos.tzkt.operations
     datasource: <datasource>
     types:
-      - transaction
-      - origination
+    - transaction
+    - origination
     contracts:
-      - <contract>
+    - <contract>
     handlers:
-      - callback: on_origination
-        pattern:
-          - type: origination
-            originated_contract: <contract>
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: propose
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: flush
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: unstake_vote
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: <contract>
-            entrypoint: unfreeze
-
+    - callback: on_origination
+      pattern:
+      - type: origination
+        originated_contract: <contract>
+    - callback: on_propose
+      pattern:
+      - destination: <contract>
+        entrypoint: propose
+    - callback: on_flush
+      pattern:
+      - destination: <contract>
+        entrypoint: flush
+    - callback: on_vote
+      pattern:
+      - destination: <contract>
+        entrypoint: vote
+    - callback: on_drop_proposal
+      pattern:
+      - destination: <contract>
+        entrypoint: drop_proposal
+    - callback: on_unstake_vote
+      pattern:
+      - destination: <contract>
+        entrypoint: unstake_vote
+    - callback: on_freeze
+      pattern:
+      - destination: <contract>
+        entrypoint: freeze
+    - callback: on_unfreeze
+      pattern:
+      - destination: <contract>
+        entrypoint: unfreeze
 indexes:
   factory_mainnet:
-    kind: operation
+    kind: tezos.tzkt.operations
     datasource: tzkt_mainnet
-    first_level: 30000
+    first_level: 2900000
     types:
-      - origination
+    - transaction
+    - origination
+    contracts:
+    - registry_mainnet
     handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_mainnet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: propose
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: unstake_vote
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_mainnet
-            entrypoint: unfreeze
-
+    - callback: on_origination
+      pattern:
+      - type: origination
+        originated_contract: registry_mainnet
+    - callback: on_factory_origination
+      pattern:
+      - type: origination
+        similar_to: registry_mainnet
+    - callback: on_propose
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: propose
+    - callback: on_vote
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: vote
+    - callback: on_drop_proposal
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: drop_proposal
+    - callback: on_unstake_vote
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: unstake_vote
+    - callback: on_flush
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: flush
+    - callback: on_freeze
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: freeze
+    - callback: on_unfreeze
+      pattern:
+      - destination: registry_mainnet
+        entrypoint: unfreeze
   factory_ghostnet:
-    kind: operation
+    kind: tezos.tzkt.operations
     datasource: tzkt_ghostnet
-    first_level: 8916100
+    first_level: 8900000
     types:
-      - origination
+    - transaction
+    - origination
+    contracts:
+    - registry_ghostnet
     handlers:
-      - callback: on_factory_origination
-        pattern:
-          - type: origination
-            similar_to: registry_ghostnet
-      - callback: on_propose
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: propose
-      - callback: on_vote
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: vote
-      - callback: on_drop_proposal
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: drop_proposal
-      - callback: on_unstake_vote
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: unstake_vote
-      - callback: on_flush
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: flush
-      - callback: on_freeze
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: freeze
-      - callback: on_unfreeze
-        pattern:
-          - type: transaction
-            destination: registry_ghostnet
-            entrypoint: unfreeze
+    - callback: on_origination
+      pattern:
+      - type: origination
+        originated_contract: registry_ghostnet
+    - callback: on_factory_origination
+      pattern:
+      - type: origination
+        similar_to: registry_ghostnet
+    - callback: on_propose
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: propose
+    - callback: on_vote
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: vote
+    - callback: on_drop_proposal
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: drop_proposal
+    - callback: on_unstake_vote
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: unstake_vote
+    - callback: on_flush
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: flush
+    - callback: on_freeze
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: freeze
+    - callback: on_unfreeze
+      pattern:
+      - destination: registry_ghostnet
+        entrypoint: unfreeze

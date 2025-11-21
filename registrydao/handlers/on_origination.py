@@ -8,7 +8,7 @@ from registrydao.constants import NETWORK_MAP
 from registrydao.utils.http import fetch
 
 from dipdup.context import HandlerContext
-from dipdup.models import Origination
+from dipdup.models.tezos_tzkt import TzktOrigination as Origination
 
 import registrydao.models as models
 from registrydao.types.registry.storage import RegistryStorage
@@ -34,10 +34,12 @@ async def on_origination(
         registry_origination: Origination[RegistryStorage],
 ) -> None:
     try:
-        network = extract_network_from_ctx(ctx)
-        token_address = registry_origination.data.storage['governance_token']['address']
-        token_id = registry_origination.data.storage['governance_token']['token_id']
         dao_address = registry_origination.data.originated_contract_address
+        ctx.logger.info(f"on_origination called for {dao_address} at level {registry_origination.data.level}")
+        
+        network = extract_network_from_ctx(ctx)
+        token_address = registry_origination.storage.governance_token.address
+        token_id = registry_origination.storage.governance_token.token_id
 
         fetched_token_resp = (await fetch(
             f'https://api.{NETWORK_MAP[network]}.tzkt.io/v1/tokens?contract={token_address}&tokenId={token_id}'))
@@ -76,7 +78,7 @@ async def on_origination(
             network=network,
             level=firstLevel,
             timestamp=datetime.strptime(fetched_token["firstTime"], '%Y-%m-%dT%H:%M:%SZ'),
-            token_id=token_id,
+            token_id=int(token_id),
             symbol=fetched_token_metadata["symbol"],
             name=fetched_token_metadata["name"],
             decimals=fetched_token_metadata["decimals"],
@@ -86,23 +88,23 @@ async def on_origination(
         )
 
         dao = await models.DAO.get_or_create(
-            admin=registry_origination.data.storage['admin'],
+            admin=registry_origination.storage.admin,
             address=dao_address,
-            frozen_token_id=registry_origination.data.storage['frozen_token_id'],
-            guardian=registry_origination.data.storage['guardian'],
-            # max_proposals=registry_origination.data.storage['max_proposals'],
-            max_quorum_change=registry_origination.data.storage['config']['max_quorum_change'],
-            max_quorum_threshold=registry_origination.data.storage['config']['max_quorum_threshold'],
-            min_quorum_threshold=registry_origination.data.storage['config']['min_quorum_threshold'],
-            period=registry_origination.data.storage['config']['period'],
-            proposal_expired_level=registry_origination.data.storage['config']['proposal_expired_level'],
-            proposal_flush_level=registry_origination.data.storage['config']['proposal_flush_level'],
-            quorum_change=registry_origination.data.storage['config']['quorum_change'],
-            fixed_proposal_fee_in_token=registry_origination.data.storage['config']['fixed_proposal_fee_in_token'],
-            last_updated_cycle=registry_origination.data.storage['quorum_threshold_at_cycle']['last_updated_cycle'],
-            quorum_threshold=round((int(registry_origination.data.storage['quorum_threshold_at_cycle']['quorum_threshold']) / 1000000) * int(fetched_token["totalSupply"])),
-            staked=registry_origination.data.storage['quorum_threshold_at_cycle']['staked'],
-            start_level=registry_origination.data.storage['start_level'],
+            frozen_token_id=registry_origination.storage.frozen_token_id,
+            guardian=registry_origination.storage.guardian,
+            # max_proposals=registry_origination.storage['max_proposals'],
+            max_quorum_change=registry_origination.storage.config.max_quorum_change,
+            max_quorum_threshold=registry_origination.storage.config.max_quorum_threshold,
+            min_quorum_threshold=registry_origination.storage.config.min_quorum_threshold,
+            period=registry_origination.storage.config.period,
+            proposal_expired_level=registry_origination.storage.config.proposal_expired_level,
+            proposal_flush_level=registry_origination.storage.config.proposal_flush_level,
+            quorum_change=registry_origination.storage.config.quorum_change,
+            fixed_proposal_fee_in_token=registry_origination.storage.config.fixed_proposal_fee_in_token,
+            last_updated_cycle=registry_origination.storage.quorum_threshold_at_cycle.last_updated_cycle,
+            quorum_threshold=round((int(registry_origination.storage.quorum_threshold_at_cycle.quorum_threshold) / 1000000) * int(fetched_token["totalSupply"])),
+            staked=registry_origination.storage.quorum_threshold_at_cycle.staked,
+            start_level=registry_origination.storage.start_level,
             network=network,
             name=fetched_metadata['name'],
             description=fetched_metadata['description'],
@@ -111,44 +113,44 @@ async def on_origination(
             discourse=discourse
         )
             
-        fetched_extra = registry_origination.data.storage["extra"]
+        fetched_extra = registry_origination.storage.extra
 
         if dao_type == 'registry':
             await models.RegistryExtra.get_or_create(
-                registry=fetched_extra['registry'],
-                registry_affected=fetched_extra['registry_affected'],
-                frozen_extra_value=fetched_extra['frozen_extra_value'],
-                frozen_scale_value=fetched_extra['frozen_scale_value'],
-                slash_division_value=fetched_extra['slash_division_value'],
-                min_xtz_amount=fetched_extra['min_xtz_amount'],
-                max_xtz_amount=fetched_extra['max_xtz_amount'],
-                slash_scale_value=fetched_extra['slash_scale_value'],
+                registry=fetched_extra.handler_storage.get('registry'),
+                registry_affected=fetched_extra.handler_storage.get('registry_affected'),
+                frozen_extra_value=fetched_extra.handler_storage.get('frozen_extra_value'),
+                frozen_scale_value=fetched_extra.handler_storage.get('frozen_scale_value'),
+                slash_division_value=fetched_extra.handler_storage.get('slash_division_value'),
+                min_xtz_amount=fetched_extra.handler_storage.get('min_xtz_amount'),
+                max_xtz_amount=fetched_extra.handler_storage.get('max_xtz_amount'),
+                slash_scale_value=fetched_extra.handler_storage.get('slash_scale_value'),
                 dao=dao[0]
             )
         else:
             if dao_type == 'lambda':
                 await models.LambdaExtra.get_or_create(
-                    registry=fetched_extra["handler_storage"]['registry'],
-                    registry_affected=fetched_extra["handler_storage"]['registry_affected'],
-                    frozen_extra_value=fetched_extra["handler_storage"]['frozen_extra_value'],
-                    frozen_scale_value=fetched_extra["handler_storage"]['frozen_scale_value'],
-                    slash_division_value=fetched_extra["handler_storage"]['slash_division_value'],
-                    min_xtz_amount=fetched_extra["handler_storage"]['min_xtz_amount'],
-                    max_xtz_amount=fetched_extra["handler_storage"]['max_xtz_amount'],
-                    slash_scale_value=fetched_extra["handler_storage"]['slash_scale_value'],
-                    max_proposal_size=fetched_extra["handler_storage"]['max_proposal_size'],
+                    registry=fetched_extra.handler_storage.get('registry'),
+                    registry_affected=fetched_extra.handler_storage.get('registry_affected'),
+                    frozen_extra_value=fetched_extra.handler_storage.get('frozen_extra_value'),
+                    frozen_scale_value=fetched_extra.handler_storage.get('frozen_scale_value'),
+                    slash_division_value=fetched_extra.handler_storage.get('slash_division_value'),
+                    min_xtz_amount=fetched_extra.handler_storage.get('min_xtz_amount'),
+                    max_xtz_amount=fetched_extra.handler_storage.get('max_xtz_amount'),
+                    slash_scale_value=fetched_extra.handler_storage.get('slash_scale_value'),
+                    max_proposal_size=fetched_extra.handler_storage.get('max_proposal_size'),
                     dao=dao[0]
                 )
             else: 
                 await models.TreasuryExtra.get_or_create(
-                    frozen_extra_value=fetched_extra['frozen_extra_value'],
-                    frozen_scale_value=fetched_extra['frozen_scale_value'],
-                    slash_division_value=fetched_extra['slash_division_value'],
-                    min_xtz_amount=fetched_extra['min_xtz_amount'],
-                    max_xtz_amount=fetched_extra['max_xtz_amount'],
-                    slash_scale_value=fetched_extra['slash_scale_value'],
+                    frozen_extra_value=fetched_extra.handler_storage.get('frozen_extra_value'),
+                    frozen_scale_value=fetched_extra.handler_storage.get('frozen_scale_value'),
+                    slash_division_value=fetched_extra.handler_storage.get('slash_division_value'),
+                    min_xtz_amount=fetched_extra.handler_storage.get('min_xtz_amount'),
+                    max_xtz_amount=fetched_extra.handler_storage.get('max_xtz_amount'),
+                    slash_scale_value=fetched_extra.handler_storage.get('slash_scale_value'),
                     dao=dao[0]
                 )
     except Exception as e:
-        print("Error in Origination Handler: " + str(registry_origination.data.originated_contract_address))
+        print(f"Error in Origination Handler: {registry_origination}")
         print(e)

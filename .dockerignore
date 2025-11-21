@@ -4,6 +4,7 @@
 # Add build files
 !requirements**
 !README.md
+!fix_reward_field.py
 
 # Add code
 !registrydao
