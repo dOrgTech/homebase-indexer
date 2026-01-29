@@ -24,17 +24,17 @@ contracts:
     kind: tezos
     address: KT1MFxwTan4ptw6PSc3KK6e1xfzMrCb382tw
     typename: registry
-  registry_ghostnet:
+  registry_shadownet:
     kind: tezos
-    address: KT1QZtF8vVUvZYRxttRwgftc4EaQHZWgzXNp
+    address: KT1MgGJX3V6stxaxkynfRR6ShJTEKFy9tLnk
     typename: registry
 datasources:
   tzkt_mainnet:
     kind: tezos.tzkt
     url: https://api.mainnet.tzkt.io
-  tzkt_ghostnet:
+  tzkt_shadownet:
     kind: tezos.tzkt
-    url: https://api.ghostnet.tzkt.io
+    url: https://api.shadownet.tzkt.io
 templates:
   registry_dao:
     kind: tezos.tzkt.operations
@@ -124,49 +124,49 @@ indexes:
       pattern:
       - destination: registry_mainnet
         entrypoint: unfreeze
-  factory_ghostnet:
+  factory_shadownet:
     kind: tezos.tzkt.operations
-    datasource: tzkt_ghostnet
-    first_level: 8900000
+    datasource: tzkt_shadownet
+    first_level: 0
     types:
     - transaction
     - origination
     contracts:
-    - registry_ghostnet
+    - registry_shadownet
     handlers:
     - callback: on_origination
       pattern:
       - type: origination
-        originated_contract: registry_ghostnet
+        originated_contract: registry_shadownet
     - callback: on_factory_origination
       pattern:
       - type: origination
-        similar_to: registry_ghostnet
+        similar_to: registry_shadownet
     - callback: on_propose
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: propose
     - callback: on_vote
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: vote
     - callback: on_drop_proposal
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: drop_proposal
     - callback: on_unstake_vote
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: unstake_vote
     - callback: on_flush
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: flush
     - callback: on_freeze
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: freeze
     - callback: on_unfreeze
       pattern:
-      - destination: registry_ghostnet
+      - destination: registry_shadownet
         entrypoint: unfreeze
