@@ -1,7 +1,7 @@
 from registrydao.utils.extra import update_extra
 from registrydao.utils.ledger import update_ledger
 
-from dipdup.models import Transaction
+from dipdup.models.tezos_tzkt import TzktTransaction as Transaction
 from dipdup.context import HandlerContext
 
 import registrydao.models as models
@@ -9,22 +9,19 @@ import registrydao.models as models
 from registrydao.types.registry.parameter.flush import FlushParameter
 from registrydao.types.registry.storage import RegistryStorage
 
-def extract_key(proposal_key_list_item) -> str:
-    return proposal_key_list_item['bytes']
-
 async def on_flush(
     ctx: HandlerContext,
     flush: Transaction[FlushParameter, RegistryStorage],
 ) -> None:
     try:
-        non_flushed_or_executed_keys = list(map(extract_key, flush.data.storage['proposals']))
+        non_flushed_or_executed_keys = list(flush.storage.proposals.keys())
         dao_address = flush.data.target_address
         dao = await models.DAO.get(address=dao_address)
         
         await update_ledger(dao_address, flush.data.diffs)
-        await update_extra(dao_address, flush.data.storage['extra']['handler_storage'])
+        await update_extra(dao_address, flush.storage.extra.handler_storage)
 
-        dao.guardian = flush.data.storage["guardian"]
+        dao.guardian = flush.storage.guardian
         await dao.save()
 
         executed_status = await models.ProposalStatus.get(description='executed')

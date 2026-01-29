@@ -1,7 +1,7 @@
 from registrydao.utils.ledger import update_ledger
 from typing import Optional
 
-from dipdup.models import OperationData, Origination, Transaction
+from dipdup.models.tezos_tzkt import TzktTransaction as Transaction
 from dipdup.context import HandlerContext
 
 import registrydao.models as models

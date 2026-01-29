@@ -1,7 +1,7 @@
 from registrydao.utils.ledger import update_ledger
 from typing import Optional
 
-from dipdup.models import OperationData, Origination, Transaction
+from dipdup.models.tezos_tzkt import TzktTransaction as Transaction
 from dipdup.context import HandlerContext
 
 import registrydao.models as models
@@ -15,7 +15,8 @@ async def on_freeze(
     freeze: Transaction[FreezeParameter, RegistryStorage],
 ) -> None:
     try:
-        await update_ledger(freeze.data.target_address, freeze.data.diffs)
+        dao_address = freeze.data.target_address
+        await update_ledger(dao_address, freeze.data.diffs)
     except Exception as e:
         print("Error in on_freeze: " + str(freeze.data.target_address))
         print(e)
